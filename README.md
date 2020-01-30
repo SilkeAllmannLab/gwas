@@ -1,4 +1,4 @@
-# Snakemake workflow: GWAS pipeline
+# Genome-Wide Association Study (GWAS) pipeline based on GAPIT and the Snakemake workflow manager
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.4.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/gwas.svg?branch=master)](https://travis-ci.org/snakemake-workflows/gwas)
@@ -9,6 +9,8 @@ Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs
 ## Authors
 
 * Marc Galland (@mgalland)
+* Martha van Os (@MvanOs)
+* Machiel XX (@BertusMuscari)
 
 ## Usage
 
@@ -77,3 +79,4 @@ The following recipe provides established best practices for running and extendi
 ## Testing
 
 Tests cases are in the subfolder `.test`. They are automtically executed via continuous integration with Travis CI.
+
