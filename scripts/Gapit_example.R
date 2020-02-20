@@ -1,7 +1,28 @@
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install(version = "3.10")
+
+if(!require(gplots)) install.packages("gplots")
+if(!require(LDheatmap)) install.packages("LDheatmap")
+if(!require(genetics)) install.packages("genetics")
+if(!require(ape)) install.packages("ape")
+if(!require(compiler)) install.packages("compiler")
+
+if(!require(EMMREML)) install.packages("EMMREML")
+if(!require(scatterplot3d)) install.packages("scatterplot3d")
+
+if(!'multtest'%in% installed.packages()[,"Package"]){
+  BiocManager::install("multtest")
+  BiocManager::install("snpStats")
+}
+
+
 rm(list=ls())
 # loading packages for GAPIT and GAPIT functions
-source("http://www.zzlab.net/GAPIT/GAPIT.library.R")
+#source("http://www.zzlab.net/GAPIT/GAPIT.library.R")
 source("http://www.zzlab.net/GAPIT/gapit_functions.txt")
+
+
 # loading data set
 myY=read.table(file="http://zzlab.net/GAPIT/data/mdp_traits.txt", head = TRUE)
 myGD=read.table("http://zzlab.net/GAPIT/data/mdp_numeric.txt",head=T)
