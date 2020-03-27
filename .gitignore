@@ -60,3 +60,5 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 GAPIT*
+gwas.Rproj
+data/Arabidopsis_2029_Maf001_Filter80.vcf.gz
