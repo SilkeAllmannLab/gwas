@@ -3,14 +3,17 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.4.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/gwas.svg?branch=master)](https://travis-ci.org/snakemake-workflows/gwas)
 
-This is the template for a new Snakemake workflow. Replace this text with a comprehensive description covering the purpose and domain.
-Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs`. Define the entry point of the workflow in the `Snakefile` and the main configuration in the `config.yaml` file.
+A Snakemake pipeline to perform a GWAS analysis based on the GAPIT R program. 
 
-## Authors
+# Input data
 
-* Marc Galland (@mgalland)
-* Martha van Os (@MvanOs)
-* Machiel XX (@BertusMuscari)
+All input data are to be found in `data/`.
+
+## Provenance
+* VCF
+* Phenotype
+
+## Format
 
 ## Usage
 
@@ -80,3 +83,17 @@ The following recipe provides established best practices for running and extendi
 
 Tests cases are in the subfolder `.test`. They are automtically executed via continuous integration with Travis CI.
 
+# Reference
+
+## Authors
+
+* Marc Galland (@mgalland)
+* Martha van Os (@MvanOs)
+* Machiel Clige (@BertusMuscari)
+
+## Citation
+How to cite this pipeline.
+
+## References
+* GAPIT
+* Snakemake
