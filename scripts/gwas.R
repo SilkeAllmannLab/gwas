@@ -2,9 +2,6 @@
 # Library
 ############
 
-## Include package vcfR as well, needed for the GM table
-library(vcfR)
-
 # To enhance script reproducibility use of checkpoint library
 # https://mran.microsoft.com/documents/rro/reproducibility/
 if (! "checkpoint" %in% installed.packages()){
@@ -23,6 +20,7 @@ suppressPackageStartupMessages(library(EMMREML))
 suppressPackageStartupMessages(library(scatterplot3d))
 
 # other packages come from Bioconductor
+# BiocManager is the package installer for Bioconductor releases
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 # install correct version of BiocManager?
@@ -50,11 +48,16 @@ source("scripts/vcf2MyGM.R")
 # Converts VCF into genotype data
 #################################
 
-# extracts genotype information from VCF file (using a custom function built around Variant Annotation package)
-genotypes = vcf2genotypes("data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf")
-MyGM <- vcf2MyGM("data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf")
+vcf_file_path <- "data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf"
 
-# a peek at the first lines / columns
-genotypes[1:5, 1:5]
-MyGM[1:5, 1:5]
+# extracts genotype information from VCF file 
+myGD = vcf2genotypes(vcfFile = vcf_file_path)
+
+# Markers physical map info
+# myGM = ID | CHROM | POS
+myGM <- vcf2physicalmap(vcfFile = vcf_file_path)
+
+
+
+myGM[1:5,]
 
