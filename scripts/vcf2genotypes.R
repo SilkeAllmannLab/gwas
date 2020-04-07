@@ -4,14 +4,20 @@ vcf2genotypes <- function(vcfFile){
   vcf = readVcf(vcfFile)
   
   # Conversion of the genotype info 'GT' of the FORMAT field into a snpMatrix
-  snp.matrix <- genotypeToSnpMatrix(vcf, uncertain = FALSE)$genotypes
+  snp_matrix <- genotypeToSnpMatrix(vcf, uncertain = FALSE)$genotypes
   
   # numeric transforms:
     # ref homozogous into 0
     # ref homozygous into 2
     # heterozygous into 1
-  snp.matrix = as(snp.matrix, "numeric") 
+  snp_matrix = as(snp_matrix, "numeric") 
   
-  return(snp.matrix)
+  # write genotype ids in a new column for GAPIT compatibility
+  snp_df = as.data.frame(snp_matrix)
+  my_gd_ready_for_gapit = bind_cols(taxa = row.names(snp_df), # genotype ids
+                                    snp_df[,-1])                  # allelic info  
+                      
+  
+  return(my_gd_ready_for_gapit)
 }
 

@@ -18,6 +18,7 @@ suppressPackageStartupMessages(library(ape))
 suppressPackageStartupMessages(library(compiler))
 suppressPackageStartupMessages(library(EMMREML))
 suppressPackageStartupMessages(library(scatterplot3d))
+suppressPackageStartupMessages(library(dplyr))
 
 # other packages come from Bioconductor
 # BiocManager is the package installer for Bioconductor releases
@@ -44,9 +45,9 @@ if ("VariantAnnotation" %in% installed.packages() && "snpStats" %in% installed.p
 source("scripts/vcf2genotypes.R")
 source("scripts/vcf2MyGM.R")
 
-#################################
-# Converts VCF into genotype data
-#################################
+##########################################
+# 1. Import and convert VCF data for GAPIT
+##########################################
 
 vcf_file_path <- "data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf"
 
@@ -57,7 +58,22 @@ myGD = vcf2genotypes(vcfFile = vcf_file_path)
 # myGM = ID | CHROM | POS
 myGM <- vcf2physicalmap(vcfFile = vcf_file_path)
 
+##########################
+# 2. Import phenotype data
+##########################
+myY = read.csv(file = "data/MyY.csv", stringsAsFactors = F, header = TRUE)
 
 
-myGM[1:5,]
+source("http://www.zzlab.net/GAPIT/GAPIT.library.R")
+source("http://www.zzlab.net/GAPIT/gapit_functions.txt")
+
+myGAPIT_GLM <- GAPIT(
+  Y=myY,
+  GD=myGD,
+  GM=myGM,
+  model="GLM",
+  PCA.total=5,
+  file.output=T
+)
+
 
