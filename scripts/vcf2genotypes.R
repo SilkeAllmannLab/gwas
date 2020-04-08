@@ -10,14 +10,14 @@ vcf2genotypes <- function(vcfFile){
     # ref homozogous into 0
     # ref homozygous into 2
     # heterozygous into 1
-  snp_matrix = as(snp_matrix, "numeric") 
+  snp_matrix = as(snp_matrix, "numeric")
+ 
+  # transpose matrix for compatibility with GWASpoly
+  t_snp_matrix = t(snp_matrix)
   
-  # write genotype ids in a new column for GAPIT compatibility
-  snp_df = as.data.frame(snp_matrix)
-  my_gd_ready_for_gapit = bind_cols(taxa = row.names(snp_df), # genotype ids
-                                    snp_df[,-1])                  # allelic info  
-                      
+  # to prepare the merge with the marker map info
+  t_snp_matrix_df = as.data.frame(t_snp_matrix)
   
-  return(my_gd_ready_for_gapit)
+  return(t_snp_matrix_df)
 }
 
