@@ -37,13 +37,22 @@ data_for_gwas <- read.GWASpoly(ploidy = 2,
                                pheno.file = "data/MyY.csv", 
                                geno.file = "data/genotype_info.csv",
                                format = "numeric",
-                               n.traits = ncol(my_Y[-1]),
+                               n.traits = 1,
                                delim = ","
                                )
   
+
   
+data2 <- set.K(data_for_gwas)
   
+gwas_params <- set.params(fixed=NULL,fixed.type=NULL,n.PC=0,MAF=0.05,geno.freq=0.95,P3D=T)
+
+data3 <- GWASpoly(data2,
+                  models = c('additive'),
+                  traits = NULL,
+                  params = gwas_params)
   
-  
-  
+data4 <- set.threshold(data3,method="Bonferroni",level=0.05, n.permute = 1000)
+
+manhattan.plot(data4,trait="ratio",model="additive")
 
