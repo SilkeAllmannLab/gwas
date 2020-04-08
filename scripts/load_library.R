@@ -1,0 +1,36 @@
+# To enhance script reproducibility use of checkpoint library
+# https://mran.microsoft.com/documents/rro/reproducibility/
+if (! "checkpoint" %in% installed.packages()){
+  install.packages("checkpoint")
+}
+library("checkpoint")
+checkpoint("2020-01-01") 
+
+# these libraries will be managed by the checkpoint package
+suppressPackageStartupMessages(library(gplots))
+suppressPackageStartupMessages(library(LDheatmap))
+suppressPackageStartupMessages(library(genetics))
+suppressPackageStartupMessages(library(ape))
+suppressPackageStartupMessages(library(compiler))
+suppressPackageStartupMessages(library(EMMREML))
+suppressPackageStartupMessages(library(scatterplot3d))
+suppressPackageStartupMessages(library(dplyr))
+
+# other packages come from Bioconductor
+# BiocManager is the package installer for Bioconductor releases
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+if(!'multtest'%in% installed.packages()[,"Package"]){
+  BiocManager::install("multtest", update = FALSE, ask = FALSE)
+  BiocManager::install("snpStats", update = FALSE, ask = FALSE)
+}
+
+if ("VariantAnnotation" %in% installed.packages() && "snpStats" %in% installed.packages()){
+  suppressMessages(library("VariantAnnotation"))
+  suppressMessages(library("snpStats"))
+} else {
+  BiocManager::install("VariantAnnotation",update = FALSE, version = "3.9")
+  BiocManager::install('snpStats',update = FALSE)
+  suppressMessages(library("VariantAnnotation"))
+}

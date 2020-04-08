@@ -12,9 +12,9 @@ vcf2physicalmap <-function(vcfFile){
   positions = start(ranges(vcf))
 
   # rebuild the physical marker dataframe
-  myGM <- data.frame(taxa = snp_ids, 
-                     chrom = chromosomes,
-                     pos = positions)
+  myGM <- data.frame(SNP = snp_ids, 
+                     Chromosome = chromosomes,
+                     Position = positions)
     
   return(myGM)
 }
