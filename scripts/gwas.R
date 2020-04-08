@@ -5,13 +5,21 @@
 # all package dependencies
 source("scripts/load_library.R")
 
-# custom functions to create the input objects for GAPIT
+# custom functions to create the input objects for the GWAS analysis
 source("scripts/vcf2genotypes.R")
 source("scripts/vcf2MyGM.R")
 
-##########################################
-# 1. Import and convert VCF data for GAPIT
-##########################################
+##########################
+# 1. Import phenotype data
+##########################
+
+
+################################
+# 2. Import and convert VCF data 
+################################
+
+# The first three columns of the genotype file are (1) marker name, (2) chromosome, and (3) position.
+# Subsequent columns contain the marker data for each individual in the population.
 
 vcf_file_path <- "data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf"
 
@@ -22,22 +30,5 @@ my_GD = vcf2genotypes(vcfFile = vcf_file_path)
 #  SNP | CHROM | POS
 my_GM <- vcf2physicalmap(vcfFile = vcf_file_path)
 
-##########################
-# 2. Import phenotype data
-##########################
-my_Y = read.csv(file = "data/MyY.csv", 
-                stringsAsFactors = F, 
-                header = TRUE, 
-                colClasses = c("character","numeric"))
-
-source("http://www.zzlab.net/GAPIT/GAPIT.library.R")
-source("http://www.zzlab.net/GAPIT/gapit_functions.txt")
-
-myGAPIT_GLM <- GAPIT(
-  GM = my_GM,
-  GD = my_subset_GD,
-  Y = my_Y[,c(1,2)],
-  file.output = FALSE
-)
 
 

@@ -1,3 +1,7 @@
+##########################
+# Source = MRAN checkpoint
+##########################
+
 # To enhance script reproducibility use of checkpoint library
 # https://mran.microsoft.com/documents/rro/reproducibility/
 if (! "checkpoint" %in% installed.packages()){
@@ -7,25 +11,18 @@ library("checkpoint")
 checkpoint("2020-01-01") 
 
 # these libraries will be managed by the checkpoint package
-suppressPackageStartupMessages(library(gplots))
-suppressPackageStartupMessages(library(LDheatmap))
-suppressPackageStartupMessages(library(genetics))
-suppressPackageStartupMessages(library(ape))
-suppressPackageStartupMessages(library(compiler))
-suppressPackageStartupMessages(library(EMMREML))
-suppressPackageStartupMessages(library(scatterplot3d))
-suppressPackageStartupMessages(library(dplyr))
+library("rrBLUP")
+library("corrplot")
+library("dplyr")
+library("BiocManager")
 
-# other packages come from Bioconductor
-# BiocManager is the package installer for Bioconductor releases
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
 
-if(!'multtest'%in% installed.packages()[,"Package"]){
-  BiocManager::install("multtest", update = FALSE, ask = FALSE)
-  BiocManager::install("snpStats", update = FALSE, ask = FALSE)
-}
 
+#######################
+# Source = Bioconductor
+#######################
+
+# Used to build our custom vcf2genotypes functions
 if ("VariantAnnotation" %in% installed.packages() && "snpStats" %in% installed.packages()){
   suppressMessages(library("VariantAnnotation"))
   suppressMessages(library("snpStats"))
@@ -34,3 +31,15 @@ if ("VariantAnnotation" %in% installed.packages() && "snpStats" %in% installed.p
   BiocManager::install('snpStats',update = FALSE)
   suppressMessages(library("VariantAnnotation"))
 }
+
+
+################
+# Source = other
+################
+# custom library to install from source
+# Reference: https://potatobreeding.cals.wisc.edu/software/
+# doi:10.3835/plantgenome2015.08.0073
+if (! "GWASpoly" %in% installed.packages()){
+  install.packages("rrblup/gwas_poly/GWASpoly_1.3.tar.gz", repos = NULL, type = "source")
+}
+library("GWASpoly")
