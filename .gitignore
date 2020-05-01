@@ -60,3 +60,8 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 GAPIT*
+gwas.Rproj
+data/Arabidopsis_2029_Maf001_Filter80.vcf.gz
+.DS_Store
+rrblup/
+data/GMI.full_set.TAIR9.2011_08_04.tar.gz
