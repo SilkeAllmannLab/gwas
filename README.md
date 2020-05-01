@@ -12,6 +12,19 @@ Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs
 * Martha van Os (@MvanOs)
 * Machiel XX (@BertusMuscari)
 
+1. [VCF dataset](#vcf-dataset)
+2. [VCF dataset](#vcf-dataset)
+3. [VCF dataset](#vcf-dataset)
+4. [VCF dataset](#vcf-dataset)
+
+## VCF dataset
+The complete VCF file called `1001genomes_snp-short-indel_only_ACGTN_v3.1.snpeff.garys.final.vcf.gz` comes from 2016 publication from the 1001 Genomes Consortium:       
+1,135 Genomes Reveal the Global Pattern of Polymorphism in Arabidopsis thaliana. The 1001 Genomes Consortium (2016). Cell, 166:(2):481-491. https://doi.org/10.1016/j.cell.2016.05.063.   
+This file can be downloaded from the EBI ENA archive: https://www.ebi.ac.uk/ena/data/view/PRJNA273563
+
+The VCF dataset was filtered using a list of accessions (available [here](data/180_accessions_Nordborg.tsv) using `bcftools` 1.7 and the following command: `bcftools view -S 180_accessions_list.txt 1001genomes_snp-short-indel_only_ACGTN_v3.1.snpeff.garys.final.vcf > filtered.vcf`  
+The 
+
 ## Usage
 
 ### Simple
