@@ -11,7 +11,6 @@ A Snakemake pipeline to perform a GWAS analysis based on the GAPIT R program.
 * Martha van Os (@MvanOs)
 * Machiel Clige (@BertusMuscari)
 
-
 # Input data
 
 All input data are to be found in `data/`.
@@ -27,20 +26,4 @@ The
 ## Phenotypes
 Describe origin of phenotype data here...
 
-# Usage
 
-
-# Reference
-
-## Authors
-
-* Marc Galland (@mgalland)
-* Martha van Os (@MvanOs)
-* Machiel Clige (@BertusMuscari)
-
-## Citation
-How to cite this pipeline.
-
-## References
-* GAPIT
-* Snakemake
