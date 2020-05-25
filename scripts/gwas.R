@@ -2,16 +2,17 @@
 # Library
 ############
 
-# all package dependencies
+### Load dependencies
 source("scripts/load_library.R")
 
-# custom functions to create the input objects for the GWAS analysis
+### Custom functions to create the input objects for the GWAS analysis
 source("scripts/vcf2genotypes.R")
-source("scripts/vcf2MyGM.R")
+source("scripts/vcf2geneticmap.R")
 
-###############################################
-# 2. Import, convert VCF and save file for GWAS 
-###############################################
+
+#######################################################################
+# 2. Import, convert VCF and extract genotype info for use with RAINBOWR 
+#######################################################################
 
 # The first three columns of the genotype file are (1) marker name, (2) chromosome, and (3) position.
 # Subsequent columns contain the marker data for each individual in the population.
@@ -19,40 +20,30 @@ source("scripts/vcf2MyGM.R")
 vcf_file_path <- "data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf"
 
 # extracts genotype information from VCF file 
-my_GD = vcf2genotypes(vcfFile = vcf_file_path)
+my_genotypes = vcf2genotypes(vcfFile = vcf_file_path)
+
+###############################################################################
+# 3. Import, convert VCF and extract genetic markers info for use with RAINBOWR 
+###############################################################################
 
 # Markers physical map info
 #  SNP | CHROM | POS
-my_GM <- vcf2physicalmap(vcfFile = vcf_file_path)
-
-genotype_info = bind_cols(my_GM, my_GD)
-
-write.csv(x = genotype_info, file = "data/genotype_info.csv",quote = F,row.names = F)
+my_genetic_map <- vcf2physicalmap(vcfFile = vcf_file_path)
 
 ################################
-# 3. Load data into the GWASpoly class
+# 4. Import phenotype data
 ################################
 
-data_for_gwas <- read.GWASpoly(ploidy = 2,
-                               pheno.file = "data/MyY.csv", 
-                               geno.file = "data/genotype_info.csv",
-                               format = "numeric",
-                               n.traits = 1,
-                               delim = ","
-                               )
-  
+pheno <- na.omit(read.delim(file = "data/root_data_fid_and_names.tsv", header = TRUE, stringsAsFactors = FALSE))
+pheno <- pheno %>% 
+  dplyr::select(FID, Ratio) %>% 
+  remove_rownames() %>% 
+  column_to_rownames(var = "FID")
 
-  
-data2 <- set.K(data_for_gwas)
-  
-gwas_params <- set.params(fixed=NULL,fixed.type=NULL,n.PC=0,MAF=0.05,geno.freq=0.95,P3D=T)
+##################################################################
+# 4. Build the data object for RAINBOWR GWAS analysis (single SNP)
+##################################################################
+modify_data_res <- modify.data(pheno.mat = pheno,
+                               geno.mat = my_genotypes)
 
-data3 <- GWASpoly(data2,
-                  models = c('additive'),
-                  traits = NULL,
-                  params = gwas_params)
-  
-data4 <- set.threshold(data3,method="Bonferroni",level=0.05, n.permute = 1000)
-
-manhattan.plot(data4,trait="ratio",model="additive")
 

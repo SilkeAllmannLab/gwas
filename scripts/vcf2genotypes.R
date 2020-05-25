@@ -4,20 +4,27 @@ vcf2genotypes <- function(vcfFile){
   vcf = readVcf(vcfFile)
   
   # Conversion of the genotype info 'GT' of the FORMAT field into a snpMatrix
+  # https://www.rdocumentation.org/packages/VariantAnnotation/versions/1.18.5/topics/genotypeToSnpMatrix
   snp_matrix <- genotypeToSnpMatrix(vcf, uncertain = FALSE)$genotypes
   
   # numeric transforms:
-    # ref homozogous into 0
-    # ref homozygous into 2
+    # ref homozogous to ref allele into 0
+    # ref homozygous to alt allele into 2
     # heterozygous into 1
-  snp_matrix = as(snp_matrix, "numeric")
- 
-  # transpose matrix for compatibility with GWASpoly
-  t_snp_matrix = t(snp_matrix)
+    #snp_matrix = as(snp_matrix, "numeric")
   
-  # to prepare the merge with the marker map info
-  t_snp_matrix_df = as.data.frame(t_snp_matrix)
+  # conversion
+  # A/A becomes -1 (homozygous of the reference allele)
+  # B/B becomes 1 (homozygous of the alternative allele) 
+  # A/B becomes 0 (heterozygous of the reference and alternative alleles).
+  snp_matrix = as(snp_matrix, "character")
+  snp_matrix[snp_matrix == "A/A"] <- -1
+  snp_matrix[snp_matrix == "B/B"] <-  1
+  snp_matrix[snp_matrix == "A/B"] <-  0
   
-  return(t_snp_matrix_df)
+  # for downstream compatibility with modify.data from RainbowR
+  class(snp_matrix) <- "numeric"
+  
+  return(snp_matrix)
 }
 
