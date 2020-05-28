@@ -65,3 +65,5 @@ data/Arabidopsis_2029_Maf001_Filter80.vcf.gz
 .DS_Store
 data/GMI.full_set.TAIR9.2011_08_04.tar.gz
 
+mran/
+rrblup/
