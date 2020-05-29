@@ -10,14 +10,14 @@ source("scripts/vcf2genotypes.R")
 source("scripts/vcf2geneticmap.R")
 
 
-#######################################################################
+########################################################################
 # 2. Import, convert VCF and extract genotype info for use with RAINBOWR 
-#######################################################################
+########################################################################
 
 # The first three columns of the genotype file are (1) marker name, (2) chromosome, and (3) position.
 # Subsequent columns contain the marker data for each individual in the population.
 
-vcf_file_path <- "data/chr1_Arabidopsis_2029_Maf001_Filter80.10k_lines.vcf"
+vcf_file_path <- "data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf"
 
 # extracts genotype information from VCF file 
 my_genotypes = vcf2genotypes(vcfFile = vcf_file_path)
@@ -66,7 +66,12 @@ zeta <- modify_data_res$ZETA
 normal_gwas_res <- RGWAS.normal(pheno = pheno_for_gwas,
                                 geno = geno_for_gwas,
                                 ZETA = zeta,
-                                plot.Manhattan = TRUE)
+                                n.PC = 0,
+                                sig.level = 0.05,
+                                thres = TRUE,
+                                P3D = TRUE,
+                                plot.Manhattan = TRUE,
+                                plot.qq = TRUE)
 
 
 
