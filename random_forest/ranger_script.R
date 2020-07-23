@@ -1,19 +1,28 @@
 # https://uc-r.github.io/random_forests
 
-source("random_forest/load_random_forest_dependencies.R")
-
+checkpoint::checkpoint("2020-06-01")
+library(rsample)      # data splitting 
+library(randomForest) # basic implementation
+library(ranger)       # a faster implementation of randomForest
+library(caret)        # an aggregator package for performing many machine learning models
+library(tibble)
+library(vcfR)
 
 ###################################
-# Transform VCF file into genotypes 
-# Converts alleles to binary data (0, 1, 2)
+# Import VCF file transformed  
+# Alleles converted to binary data (0, 1, 2)
 ###########################################
-vcf_file_path <- "data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf"
 
-# extracts genotype information from VCF file 
-my_genotypes = vcf2genotypes(vcfFile = vcf_file_path) %>% 
+vcf <- read.vcfR("data/chr01.header.Arabidopsis_2029_Maf001_Filter80.vcf.gz", verbose = FALSE, nrows = 1000)
+
+# Extract genotype information
+genotypes <- extract.gt(vcf, 
+                        return.alleles = TRUE, 
+                        IDtoRowNames = TRUE, 
+                        convertNA = TRUE) %>% 
+  t(.) %>% 
   as.data.frame() %>% 
-  rownames_to_column("FID") 
-  
+  rownames_to_column("FID")
 
 ################################
 # Import phenotype data
@@ -32,7 +41,7 @@ pheno <- pheno %>%
 # Create object ready for Random Forest
 #######################################
 
-df <- dplyr::inner_join(my_genotypes, pheno, by = "FID") %>% 
+df <- dplyr::inner_join(genotypes, pheno, by = "FID") %>% 
   select(- FID)
 
 # to ensure compatibility with formula (numbers not allowed for columns)
@@ -84,10 +93,10 @@ rf_optimised_model <- ranger(
 rf_optimised_model$variable.importance %>% 
   as.data.frame() %>% 
   rename("var_imp" = ".") %>% 
-  rownames_to_column("snp")
+  rownames_to_column("snp") %>% 
   dplyr::arrange(desc(var_imp)) %>%
   dplyr::top_n(25) %>%
-  ggplot(aes(reorder(names, var_imp), var_imp)) +
+  ggplot(aes(reorder(snp, var_imp), var_imp)) +
   geom_col() +
   coord_flip() +
   ggtitle("Top 25 important variables")

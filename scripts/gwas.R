@@ -71,6 +71,7 @@ normal_gwas_res <- RGWAS.normal(pheno = pheno_for_gwas,
                                 thres = TRUE,
                                 P3D = TRUE,
                                 plot.Manhattan = TRUE,
+                                saveName = "plot.png",
                                 plot.qq = TRUE)
 
 

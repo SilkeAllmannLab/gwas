@@ -1,4 +1,5 @@
 library("patchwork")
+library("tidyverse")
 
 pheno_df <- na.omit(read.csv(file = "data/Root_data_2020.csv", 
                             header = TRUE, 
