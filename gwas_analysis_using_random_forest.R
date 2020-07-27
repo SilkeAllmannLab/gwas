@@ -10,6 +10,7 @@ params <- read_yaml("config.yml")
 
 # vcfR
 max_ram = params$ram   # max RAM to use to read the VCF file
+n_snps = params$snps   # number of rows to read. 
 
 # MUVR
 n_cores = params$n_cores
@@ -34,21 +35,17 @@ registerDoParallel(cl)
 ##############################
 source("scripts/vcf2genotypes.R")
 
-vcf <- read.vcfR("data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf.gz", 
+vcf <- read.vcfR("data/Arabidopsis_2029_Maf001_Filter80.ten_thousand_lines.vcf.gz", 
           verbose = TRUE,
           limit = max_ram,
-          nrows = 100,
+          nrows = n_snps,
           convertNA = TRUE, 
           checkFile = TRUE)
 
-
-
-genotypes <- convert_vcf_to_genotypes(vcf_object = vcf,
-                                      return_alleles = FALSE,
-                                      id_to_rownames = TRUE,
-                                      convert_dot_to_na = TRUE)
-
-
+genotypes <- convert_vcf_to_genotypes(
+  vcf_object = vcf,
+  return_alleles = FALSE,
+  convert_dot_to_na = TRUE)
 
 #######################
 # Section 2: phenotypes
@@ -68,8 +65,7 @@ phenotypes = na.omit(phenotypes)
 
 df <- inner_join(genotypes, phenotypes, by = "id") 
 
-X = df %>% dplyr::select(- id,        
-                         - phenotype)  
+X = df %>% dplyr::select(- id, - phenotype)  
 Y = df$phenotype
 
 rf_model <- MUVR(X = X, 
@@ -84,3 +80,7 @@ rf_model <- MUVR(X = X,
                  fitness = "RMSEP", 
                  method = "RF", 
                  parallel = TRUE)
+
+plotVAL(rf_model)
+
+plotMV(rf_model)

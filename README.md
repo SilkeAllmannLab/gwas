@@ -1,14 +1,7 @@
-# From SNPs to phenotype: Genome-Wide Association Study (GWAS) pipeline
+# From SNPs to phenotype using Random Forest 
 
-[![Snakemake](https://img.shields.io/badge/snakemake-≥5.4.0-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![Build Status](https://travis-ci.org/snakemake-workflows/gwas.svg?branch=master)](https://travis-ci.org/snakemake-workflows/gwas)
+A pipeline to relate Single Nucleotide Polymorphisms (SNPs) to a continuous phenotype using a Random Forest approach from the `MUVR` package. It is meant to perform a similar analysis as Genome Wide Analysis (GWAS) using genetic variant (Variant Call Format) and phenotype information. Yet, it brings the power and accuracy of the Machine Learning Random Forest approach. 
 
-# Description
-A Snakemake pipeline to perform a Genome Wide Analysis (GWAS) using genetic variant (Variant Call Format) and phenotype information.
-
-This Snakemake pipeline will:
-- Perform a Random Forest analysis using the R `ranger` package to identify SNPs important for the phenotype of interest.
-- Perform a canonical GWAS analysis using the `RainbowR` package.  
  
 <!-- MarkdownTOC autolink="true" levels="1,2" -->
 
@@ -21,11 +14,11 @@ This Snakemake pipeline will:
 - [Installation](#installation)
 	- [Install RStudio](#install-rstudio)
 	- [Clone the repository](#clone-the-repository)
-	- [Run the gwas.R script](#run-the-gwasr-script)
+	- [Run the random_forest_gwas.R script](#run-the-random_forest_gwasr-script)
 - [References](#references)
 	- [:writing\_hand: Authors](#writing_hand-authors)
-	- [RainbowR](#rainbowr)
-	- [Ranger package](#ranger-package)
+	- [vcfR](#vcfr)
+	- [MUVR](#muvr)
 
 <!-- /MarkdownTOC -->
 
@@ -34,36 +27,22 @@ This Snakemake pipeline will:
 ## Inputs
 
 ### VCF file 
-A [Variant Call Format (VCF)](https://en.wikipedia.org/wiki/Variant_Call_Format) file that contains the nucleotidic variations is needed. The VCF file has to be of version 4.0 and higher. It will be converted to a genotype matrix using [VCFtools](https://vcftools.github.io/man_latest.html) where genotypes are represented by:
+A [Variant Call Format (VCF)](https://en.wikipedia.org/wiki/Variant_Call_Format) file that contains the nucleotidic variations is needed. The VCF file has to be of version 4.0 and higher. It will be converted to a genotype matrix using [vcfR](https://knausb.github.io/vcfR_documentation/index.html) where genotypes are represented by:
 - "0" for genome positions homozygous for the reference allele.
 - "2" for genome positions homozygous for the alternative allele.
 - "1" for genome positions heterozygous (one reference allele, one alternative allele).
 
-The first column should contain the identifier for each individual (e.g. plant accessions).
-
-The example 
-```
-vcftools --vcf Arabidopsis_2029_Maf001_Filter80.1000lines.vcf --012 --out vcf_parsed/test
-
-
-# to remove the first row numbers in the test.012 file
-awk 'BEGIN{FS=OFS="\t"}{$1="";sub("\t","")}1' test.012
-
-#   
-```
 
 ### Phenotype file
 A tabulated separated file containing two columns:
-
+1. The identifier for each individual. Column name should be `id`.
+2. A phenotype column that contains the phenotypic values. Column name should be `phenotype` 
 
 
 ## Outputs
 
-This pipeline will generate several GWAS output such as:
-
-### Manhattan plot
-<img src="./img/manhattan_plot.png" height="400px" alt="Manhattan plot"> 
-
+1. A table of the most important SNPs related to the phenotype along with their p-values.
+2. A plot of the model Q2 metric compared to a distribution of random Q2 values obtained using N permutations (e.g. N = 100).
 
 # Example datasets
 
@@ -78,8 +57,7 @@ _Test file_: a small subset of the massive initial VCF file is available for tes
 
 
 ## 2.2 Phenotypes
-Describe origin of phenotype data here...
-
+Arabidopsis ecotypes were treated with 2-E-hexanal and their main root length measured. A response ratio was then calculated for each of the ecotypes by comparing the 2-E-hexanal treatment with a mock (methanol).
 
 
 # Installation 
@@ -88,13 +66,13 @@ Describe origin of phenotype data here...
 If not already done, install [R (version >= 3.5)](https://www.r-project.org/) and [RStudio](https://rstudio.com/) for your Operating System. 
 
 ## Clone the repository
-1. Open RStudio. 
-2. Select "File > New Project". 
-3. Select 
+In the Shell, type `git clone https://github.com/SilkeAllmannLab/gwas.git`
 
-
-## Run the gwas.R script
-Open RStudio and the `gwas.R` script located in `scripts/`.
+## Run the random_forest_gwas.R script
+- Open RStudio.
+- In RStudio, select "File > New Project". 
+- Open the `random_forest_gwas.R` script. 
+- Run the script.  
 
 # References 
 
@@ -104,8 +82,10 @@ Open RStudio and the `gwas.R` script located in `scripts/`.
 * Martha van Os (@MvanOs)
 * Machiel Clige (@BertusMuscari)
 
-## RainbowR
-The [RAINBOWR R](https://doi.org/10.1371/journal.pcbi.1007663) package was used to perform GWAS analysis.  
+## vcfR
+The R package vcfR is heavily described [here](https://knausb.github.io/vcfR_documentation/index.html).
 
-## Ranger package
+## MUVR
+The MUVR package for R is described [here](https://gitlab.com/CarlBrunius/MUVR).
+
 

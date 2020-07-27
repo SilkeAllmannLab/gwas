@@ -10,3 +10,4 @@ n_outer: 8                # Number of outer cross-validation segments
 n_inner: 4                # number of inner cross-validation segments
 variable_ratio: 0.8       # Proportion of variables kept per iteration (recursive variable elimination) 
 n_permutations: 10        # Number of permutations (here set to 25 for illustration; normally set to ≥100) 
+  
