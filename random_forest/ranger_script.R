@@ -1,64 +1,31 @@
 # https://uc-r.github.io/random_forests
 
-if ("devtools" %in% installed.packages()){
-  library("devtools")
-  } else {
-    install.packages("devtools")
-  }
+###################
+# 0. Load libraries
+# 0. Set variable values
+###################
+source("random_forest/load_ranger_rf_dependencies.R")
 
-if ("vcfR" %in% installed.packages()){
-  library("vcfR")
-} else {
-  devtools::install_version('vcfR', version = '1.10.0', upgrade = "never" )
-}
+seed_for_r = 123
 
-if ("ranger" %in% installed.packages()){
-  library("ranger")
-} else {
-  devtools::install_version('ranger', version = '0.12.0', upgrade = "never") 
-}
+n_permutations = 100
+n_threads      = 2 
+kfolds         = 5
 
-if ("tidyverse" %in% installed.packages()){
-  library("tidyverse")
-} else {
-  devtools::install_version('tidyverse', version = '1.2.0', upgrade = "never") 
-}
-
-
-#checkpoint::checkpoint("2020-06-01")
-#library(rsample)      # data splitting 
-#library(randomForest) # basic implementation
-#library(ranger)       # a faster implementation of randomForest
-#library(caret)        # an aggregator package for performing many machine learning models
-#library(tibble)
-
-
-#library(dplyr)
 
 ##############################
+# Section 1: VCF
 # Import VCF file transformed  
 # Convert genotypes to alleles
+# Generates a `genotypes` R object
 ##############################
 
-vcf <- read.vcfR("data/chr01.header.Arabidopsis_2029_Maf001_Filter80.vcf.gz", 
-                 verbose = FALSE, 
-                 nrows = 1000, 
-                 convertNA = TRUE, 
-                 checkFile = TRUE)
-
-# Extract genotype information
-# Rows: individuals
-# Columns: SNPs
-genotypes <- extract.gt(vcf, 
-                        return.alleles = TRUE, 
-                        IDtoRowNames = TRUE, 
-                        convertNA = TRUE) %>% 
-  t(.) %>%                            
-  as.data.frame() %>% 
-  rownames_to_column("FID")
+source("random_forest/vcf_to_genotype_matrix.R")
 
 ################################
+# Section 2: phenotype
 # Import phenotype data
+# Generates a `pheno` R object
 ################################
 pheno <- na.omit(read.delim(file = "data/root_data_fid_and_names.tsv", 
                             header = TRUE, 
@@ -69,25 +36,41 @@ pheno <- na.omit(read.delim(file = "data/root_data_fid_and_names.tsv",
   dplyr::select(FID, Ratio) %>% 
   remove_rownames() 
 
-#######################################
-# Create object ready for Random Forest
-#######################################
 
-df <- dplyr::inner_join(genotypes, pheno, by = "FID") 
+# create object ready for random forest
+df <- dplyr::inner_join(genotypes, pheno, by = "FID") %>% 
+  dplyr::select(- FID)
 
-# to ensure compatibility with formula (numbers not allowed for columns)
-names(df) <- make.names(names(df), allow_ = FALSE) 
+###################################
+# Section 3: Random Forest analysis
+###################################
+set.seed(seed_for_r)
 
 
-######################
-# Ranger Random Forest
-######################
+#####################################################################
+# Section 3.1: K-fold cross-validation to estimate model average RMSE 
+#####################################################################
+
+# Rsample implementation of cross validation
+cv_split <- vfold_cv(data = df, v = kfolds)
+
+# makes two dataframes per fold: one for training and one for testing
+cv_data <- cv_split %>% 
+  mutate(
+    # Extract the train dataframe for each split
+    training = map(splits, ~training(.x)), 
+    # Extract the validate dataframe for each split
+    testing = map(splits, ~testing(.x))
+  )
+
+
+##############################################################
+# Section 3.2: create Random Forest model (from original data)
+##############################################################
+
 # hyperparameter grid search --> same as above but with increased mtry values
 hyper_grid <- expand.grid(
-  ntree     = seq(1000, 10000, by = 1000),
-  #mtry       = seq(50, 200, by = 25),
-  #node_size  = seq(3, 9, by = 2),
-  sample_size = c(.60, .70, .80),
+  ntree     = seq(1000, 10000, by = 500),
   OOB_RMSE  = 0
 )
 
@@ -97,15 +80,14 @@ for(i in 1:nrow(hyper_grid)) {
   # train model
   rf_model <- ranger(
     dependent.variable.name = "Ratio",
-    data                    = df, 
+    data                    = train_data, 
+    sample.fraction         = 1, # take all data
     num.trees               = hyper_grid$ntree[i],
-    #mtry                    = hyper_grid$mtry[i],
-    #min.node.size           = hyper_grid$node_size[i],
-    sample.fraction         = hyper_grid$sample_size[i],
-    seed                    = 123
+    seed                    = seed_for_r,
+    importance = "permutation"
   )
   
-  # add OOB error to grid
+  # add OOB Root Mean Squared Error to grid
   hyper_grid$OOB_RMSE[i] <- sqrt(rf_model$prediction.error)
 }
 
@@ -113,16 +95,16 @@ for(i in 1:nrow(hyper_grid)) {
 best_params <- hyper_grid[which.min(hyper_grid$OOB_RMSE),]
 
 rf_optimised_model <- ranger(
-  dependent.variable.name = "Ratio",
-  data = df,
-  num.trees = best_params$ntree,
-  mtry = best_params$mtry,
-  min.node.size = best_params$node_size,
-  sample.fraction = best_params$sample_size,
-  seed = 123,
-  importance = "permutation",
-  write.forest = FALSE,
-  num.threads = 2
+  dependent.variable.name        = "Ratio",
+  data                           = df,
+  num.trees                      = best_params$ntree,
+  mtry                           = best_params$mtry,
+  min.node.size                  = best_params$node_size,
+  sample.fraction                = best_params$sample_size,
+  seed                           = seed_for_r,
+  importance                    = "permutation",
+  write.forest                  = TRUE,
+  num.threads                   = n_threads
 )
 
 rf_optimised_model$variable.importance %>% 
@@ -134,4 +116,33 @@ rf_optimised_model$variable.importance %>%
   ggplot(aes(reorder(snp, var_imp), var_imp)) +
   geom_col() +
   coord_flip() +
+  labs(x = "SNP identifier", y = "SNP importance") +
   ggtitle("Top 25 important variables")
+
+
+##############################################################
+# Calculate optimised Random Forest p-value using permutations
+##############################################################
+
+# generate N permuted dataframes on the phenotype column
+
+# run the optimised Random Forest model on each permuted dataframe
+
+# gather the RMSE metric and compare the original RMSE to the distribution of permuted RMSE
+
+###########################################
+# Calculate SNP p-values using permutations
+###########################################
+
+snp_pvalues <- importance_pvalues(
+  x                = rf_optimised_model, 
+  method           = "altmann",
+  formula          = Ratio ~ .,
+  data             = df,
+  num.permutations = n_permutations,
+  num.threads      = n_threads
+  )
+
+
+
+
