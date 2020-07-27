@@ -1,0 +1,12 @@
+---
+# vcfR parameters
+ram: 1e+09  # amount of RAM in bytes not to exceed when reading in a file. 1e+09 = 1Gb RAM
+snps: 1000  # number of rows in VCF file to read. Set to "-1" to read all lines"
+
+# MUVR parameters
+n_cores: 2                # Number of processor threads to use
+n_repetitions: 5          # Number of MUVR repetitions (whole dataset, whole process)
+n_outer: 8                # Number of outer cross-validation segments
+n_inner: 4                # number of inner cross-validation segments
+variable_ratio: 0.8       # Proportion of variables kept per iteration (recursive variable elimination) 
+n_permutations: 10        # Number of permutations (here set to 25 for illustration; normally set to ≥100) 

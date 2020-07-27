@@ -1,4 +1,13 @@
 # load dependencies for MUVR analysis
+if ("yaml" %in% installed.packages()){
+  library("yaml")
+} else {
+  library("devtools")
+  install_version(package = "yaml", version = "2.2.0")
+  library("yaml")
+}
+
+
 if ("MUVR" %in% installed.packages()){
   library("MUVR")
 } else {

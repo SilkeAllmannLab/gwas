@@ -1,8 +1,5 @@
 ---
 number_of_snps_to_read: 1000
-
-r_seed: 123
-
 muvr:
   nCore: 2                  # Number of processor threads to use
   nRep: 5                   # Number of MUVR repetitions (whole dataset, whole process)
@@ -10,5 +7,3 @@ muvr:
   nInner: 4                 # number of inner cross-validation segments
   varRatio: 0.8             # Proportion of variables kept per iteration (recursive variable elimination) 
   nPerm: 10                 # Number of permutations (here set to 25 for illustration; normally set to ≥100) 
-
----

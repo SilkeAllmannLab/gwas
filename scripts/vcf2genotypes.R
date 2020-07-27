@@ -1,30 +1,60 @@
-vcf2genotypes <- function(vcfFile){
-  ### this function is derived from the VariantAnnotation readVcf function
-  # see https://bioconductor.org/packages/release/bioc/vignettes/VariantAnnotation/inst/doc/VariantAnnotation.pdf
-  vcf = readVcf(vcfFile)
+convert_vcf_to_genotypes <- function(vcf_object = vcf,
+                                     return_alleles = FALSE,
+                                     id_to_rownames = TRUE,
+                                     convert_dot_to_na = TRUE
+){
   
-  # Conversion of the genotype info 'GT' of the FORMAT field into a snpMatrix
-  # https://www.rdocumentation.org/packages/VariantAnnotation/versions/1.18.5/topics/genotypeToSnpMatrix
-  snp_matrix <- genotypeToSnpMatrix(vcf, uncertain = FALSE)$genotypes
+  # Convert genotypes to a matrix of alleles
+  genotypes <- extract.gt(vcf,
+                          return.alleles = return_alleles,
+                          IDtoRowNames = id_to_rownames,
+                          convertNA = convert_dot_to_na) %>%
+    t(.) %>%
+    as.data.frame() %>%
+    rownames_to_column("id") 
   
-  # numeric transforms:
-    # ref homozogous to ref allele into 0
-    # ref homozygous to alt allele into 2
-    # heterozygous into 1
-    #snp_matrix = as(snp_matrix, "numeric")
+  # create a new vector of SNP names compatible with MUVR 
+  # No single number as variable identifier
+  snp_names = as.vector(
+    sapply(
+      names(genotypes[2:length(names(genotypes))]),
+      function(x){paste("SNP",x,sep = "_")})
+  )
+  colnames(genotypes) = c("id", snp_names)
   
-  # conversion
-  # A/A becomes -1 (homozygous of the reference allele)
-  # B/B becomes 1 (homozygous of the alternative allele) 
-  # A/B becomes 0 (heterozygous of the reference and alternative alleles).
-  snp_matrix = as(snp_matrix, "character")
-  snp_matrix[snp_matrix == "A/A"] <- -1
-  snp_matrix[snp_matrix == "B/B"] <-  1
-  snp_matrix[snp_matrix == "A/B"] <-  0
+  # convert factor-encoded alleles to character
+  genotypes = genotypes %>% 
+    pivot_longer(cols = - id, 
+                 names_to = "SNP", 
+                 values_to = "alleles") %>% 
+    mutate(alleles = as.character(alleles)) %>% 
+    pivot_wider(id_cols = "id", 
+                names_from = "SNP", 
+                values_from = "alleles", )
   
-  # for downstream compatibility with modify.data from RainbowR
-  class(snp_matrix) <- "numeric"
+  # remove NAs as they are not accepted by MUVR
+  genotypes = na.omit(genotypes)
   
-  return(snp_matrix)
+  
+  # convert factor-encoded alleles to character
+  genotypes = genotypes %>% 
+    pivot_longer(cols = - id, 
+                 names_to = "SNP", 
+                 values_to = "alleles") %>% 
+    mutate(alleles = as.character(alleles)) %>% 
+    pivot_wider(id_cols = "id", 
+                names_from = "SNP", 
+                values_from = "alleles", )
+  
+  # remove NAs as they are not accepted by MUVR
+  genotypes = na.omit(genotypes)
+  
+  # get unique values
+  # convert to numbers
+  genotypes[genotypes == "0|0"] <- 0
+  genotypes[genotypes == "1|1"] <- 2
+  genotypes[genotypes == "1|0"] <- 1
+  genotypes[genotypes == "0|1"] <- 1
+  
+  return(genotypes)
 }
-
