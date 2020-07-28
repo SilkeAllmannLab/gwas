@@ -10,7 +10,7 @@ LABEL author="m.galland@uva.nl" \
 WORKDIR /home/gwas/
 
 # add R scripts 
-COPY ["rscript_for_gwas_analysis_using_random_forest.R", "load_muvr_dependencies.R",  "vcf2genotypes.R", "./"]
+COPY ["gwas.R", "load_muvr_dependencies.R",  "vcf2genotypes.R", "./"]
 
 
  # R packages. Specific versions are used here

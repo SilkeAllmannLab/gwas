@@ -15,11 +15,12 @@ A pipeline to relate Single Nucleotide Polymorphisms (SNPs) to a continuous phen
 - [2. Installation](#2-installation)
 	- [Install RStudio](#install-rstudio)
 	- [Clone the repository](#clone-the-repository)
-	- [Run the random_forest_gwas.R script](#run-the-random_forest_gwasr-script)
 - [3. Test](#3-test)
 	- [Example datasets](#example-datasets)
 		- [VCF dataset](#vcf-dataset)
 		- [Phenotypes](#phenotypes)
+	- [Test run](#test-run)
+	- [Run the random_forest_gwas.R script](#run-the-random_forest_gwasr-script)
 - [4. References](#4-references)
 	- [:writing\_hand: Authors](#writing_hand-authors)
 	- [vcfR](#vcfr)
@@ -67,11 +68,7 @@ If not already done, install [R (version >= 3.5)](https://www.r-project.org/) an
 ## Clone the repository
 In the Shell, type `git clone https://github.com/SilkeAllmannLab/gwas.git`
 
-## Run the random_forest_gwas.R script
-- Open RStudio.
-- In RStudio, select "File > New Project". 
-- Open the `random_forest_gwas.R` script. 
-- Run the script.  
+:tada: :confetti_ball:  That's it! :tada: :confetti_ball:
 
 # 3. Test
 
@@ -110,6 +107,13 @@ done
 A `root_data_fid_and_names.tsv` file contains the genotype line identifier and the phenotypic values. Arabidopsis ecotypes were treated with 2-E-hexanal and their main root length measured. A response ratio was then calculated for each of the ecotypes by comparing the 2-E-hexanal treatment with a mock (methanol).
 
 
+## Test run
+
+## Run the random_forest_gwas.R script
+- Open RStudio.
+- In RStudio, select "File > New Project". 
+- Open the `gwas.R` script. 
+- Run the script.  
 
 
 # 4. References 

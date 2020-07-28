@@ -1,13 +1,10 @@
-convert_vcf_to_genotypes <- function(vcf_object = vcf,
-                                     return_alleles = FALSE,
-                                     convert_dot_to_na = TRUE
-){
+convert_vcf_to_genotypes <- function(vcf_object = vcf){
   
   # Convert genotypes to a matrix of alleles
   genotypes <- extract.gt(vcf,
-                          return.alleles = return_alleles,
-                          IDtoRowNames = FALSE,
-                          convertNA = convert_dot_to_na) %>%
+                          return.alleles = FALSE,
+                          IDtoRowNames = TRUE,
+                          convertNA = TRUE) %>%
     t(.) %>%
     as.data.frame() %>%
     rownames_to_column("id") 

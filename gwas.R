@@ -5,28 +5,9 @@
 ##############################
 source("scripts/load_muvr_dependencies.R")
 
-# create parser list
-option_list <- list(
-  make_option(c("-v", "--vcf"), 
-              default = NULL, 
-              type = "character",
-              action = "store",
-              metavar = "character",
-              help="Path to VCF file (gzipped or not)"),
-  make_option(c("-p", "--phenotype"), 
-              default=NULL, 
-              type="character",
-              action = "store",
-              metavar = "character",
-              help="Phenotype input file")
-)
-
-opt_parser <- optparse::OptionParser(option_list = option_list)
-args <- optparse::parse_args(opt_parser)
-
-
+# create parser 
 option_list = list(
-  make_option(c("-v", "--vcf"), 
+  make_option(c("--vcf"), 
               type = "character", 
               default = NULL, 
               help="Path to VCF file (gzipped or not)", 
@@ -51,7 +32,7 @@ option_list = list(
               default = 1, 
               help="Number of cores/CPUs to use (parallel execution) [default= %default]",
               metavar="integer"),
-  make_option(c("-r", "--n_reps"), 
+  make_option(c("-n", "--n_reps"), 
               type = "integer", 
               default = 100, 
               help="Number of repetitions to perform [default= %default]",
@@ -63,7 +44,7 @@ option_list = list(
               metavar="integer"),
   make_option(c("-i", "--n_inner"), 
               type = "integer", 
-              default=4, 
+              default = 4, 
               help="Number of inner test segments to perform [default= %default]",
               metavar="integer"),
   make_option(c("-m", "--model"), 
@@ -74,13 +55,15 @@ option_list = list(
               type="double", 
               default=0.8, 
               help="Ratio of variables kept per iteration [default= %default]"),
-  make_option(c("-z", "--n_permutations"), 
+  make_option(c("-k", "--n_permutations"), 
               type = "integer", 
               default=100,
+              metavar = "integer",
               help="Number of permutations [default= %default]")
 ) 
-opt_parser = OptionParser(option_list=option_list, 
-                          epilogue = "A program to perform GWAS analysis using the Random Forest ML algorithm");
+opt_parser = OptionParser(option_list=option_list,
+                          description = "\n A program to perform GWAS analysis using the Random Forest ML algorithm",
+                          epilogue = "Please visit https://github.com/SilkeAllmannLab/gwas for additional information");
 args = parse_args(opt_parser)
 
 #############################

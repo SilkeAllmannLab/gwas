@@ -9,8 +9,8 @@ source("scripts/load_muvr_dependencies.R")
 params <- read_yaml("config.yml")
 
 # vcfR
-max_ram = params$ram   # max RAM to use to read the VCF file
-n_snps = params$snps   # number of rows to read. 
+vcf_file_path = params$vcf_file_path      # path to VCF file (gzipped or not)
+n_snps = params$n_snps                     # number of rows to read. 
 
 # MUVR
 n_cores = params$n_cores
@@ -35,9 +35,8 @@ registerDoParallel(cl)
 ##############################
 source("scripts/vcf2genotypes.R")
 
-vcf <- read.vcfR("data/chr01_7000SNPs_vcf.gz", 
+vcf <- read.vcfR(params$vcf_file_path, 
           verbose = TRUE,
-          limit = max_ram,
           nrows = n_snps,
           convertNA = TRUE, 
           checkFile = TRUE)
@@ -82,5 +81,5 @@ rf_model <- MUVR(X = X,
                  parallel = TRUE)
 
 plotVAL(rf_model)
-
 plotMV(rf_model)
+
