@@ -35,7 +35,7 @@ registerDoParallel(cl)
 ##############################
 source("scripts/vcf2genotypes.R")
 
-vcf <- read.vcfR("data/Arabidopsis_2029_Maf001_Filter80.ten_thousand_lines.vcf.gz", 
+vcf <- read.vcfR("data/chr01_7000SNPs_vcf.gz", 
           verbose = TRUE,
           limit = max_ram,
           nrows = n_snps,
