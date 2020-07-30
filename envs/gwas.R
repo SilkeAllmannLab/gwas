@@ -67,7 +67,7 @@ opt_parser = OptionParser(option_list=option_list,
 args = parse_args(opt_parser)
 
 #############################
-Section 0: make cluster
+# Section 0: make cluster
 #############################
 cl = makeCluster(args$n_cores)
 registerDoParallel(cl)
@@ -86,10 +86,7 @@ vcf <- read.vcfR(args$vcf,
                  convertNA = TRUE,
                  checkFile = TRUE)
 
-genotypes <- convert_vcf_to_genotypes(
-  vcf_object = vcf,
-  return_alleles = FALSE,
-  convert_dot_to_na = TRUE)
+genotypes <- convert_vcf_to_genotypes(vcf)
 
 #######################
 # Section 2: phenotypes

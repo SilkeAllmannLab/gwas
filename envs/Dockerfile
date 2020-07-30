@@ -10,13 +10,17 @@ LABEL author="m.galland@uva.nl" \
 WORKDIR /home/gwas/
 
 # add R scripts 
-COPY ["gwas.R", "load_muvr_dependencies.R",  "vcf2genotypes.R", "./"]
+COPY ["gwas.R",  "vcf2genotypes.R", "./"]
 
 
  # R packages. Specific versions are used here
 RUN R -e "devtools::install_version('yaml', version = '2.2.0')" \
       && R -e "devtools::install_version('doParallel', version = '1.0.14')" \
-      && R -e "devtools::install_version('tidyverse', version = '1.2.0')" \
-      && R -e "devtools::install_version('vcfR', version = '1.11.0')"
+      && R -e "install.packages('vcfR')" \
+      && R -e "devtools::install_git('https://gitlab.com/CarlBrunius/MUVR.git')"
+
+# if no arguments are provided, will print help and exit
+# additional arguments will be appended to the command
+ENTRYPOINT ["Rscript --vanilla gwas.R"]
 
 

@@ -32,12 +32,28 @@ if ("doParallel" %in% installed.packages()){
   suppressPackageStartupMessages(library("doParallel"))
 }
 
-if ("tidyverse" %in% installed.packages()){
-  suppressPackageStartupMessages(library("tidyverse"))
+if ("tidyr" %in% installed.packages()){
+  suppressPackageStartupMessages(library("tidyr"))
 } else {
   library("devtools")
-  install_version("tidyverse", version = "1.2.0")
-  suppressPackageStartupMessages(library("tidyverse"))
+  devtools::install_github("tidyverse/tidyr")
+  suppressPackageStartupMessages(library("tidyr"))
+}
+
+if ("ggplot2" %in% installed.packages()){
+  suppressPackageStartupMessages(library("ggplot2"))
+} else {
+  library("devtools")
+  install_version("ggplot2", version = "3.3.0")
+  suppressPackageStartupMessages(library("ggplot2"))
+}
+
+if ("dplyr" %in% installed.packages()){
+  suppressPackageStartupMessages(library("dplyr"))
+} else {
+  library("devtools")
+  install_version("dplyr", version = "0.8.5")
+  suppressPackageStartupMessages(library("dplyr"))
 }
 
 if ("vcfR" %in% installed.packages()){
