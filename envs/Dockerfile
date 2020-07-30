@@ -10,7 +10,7 @@ LABEL author="m.galland@uva.nl" \
 WORKDIR /home/gwas/
 
 # add R scripts 
-COPY ["gwas.R",  "vcf2genotypes.R", "./"]
+COPY ["gwas.R",  "vcf2genotypes.R", "/home/gwas/"]
 
 
  # R packages. Specific versions are used here
