@@ -14,18 +14,14 @@ COPY ["./gwas.R",  "./load_dependencies.R", "./vcf2genotypes.R", "/home/gwas/"]
 
 # R packages. Specific versions are used here
 RUN R -e "install.packages('devtools')" \
-    && R -e "install.packages('tidyr')" 
-      
-
-RUN R -e "devtools::install_version('yaml', version = '2.2.0')" \
+      && R -e "install.packages('tidyr')" \
+      && R -e  "devtools::install_version('yaml', version = '2.2.0')" \
       && R -e "devtools::install_version('doParallel', version = '1.0.14')" \
       && R -e "install.packages('vcfR')" \
-      && R -e "devtools::install_git('https://gitlab.com/CarlBrunius/MUVR.git')" 
-
-
-      # && R -e "devtools::install_version('tibble', version = '3.0.0')" \
-      # && R -e "devtools::install_version('dplyr', version = '0.8.5')" \
-      # && R -e "devtools::install_version('ggplot2', version = '3.3.0')"
+      && R -e "devtools::install_git('https://gitlab.com/CarlBrunius/MUVR.git')" \
+      && R -e "devtools::install_version('tibble', version = '3.0.0')" \
+      && R -e "devtools::install_version('dplyr', version = '0.8.5')" \
+      && R -e "devtools::install_version('ggplot2', version = '3.3.0')"
       
 
 # if no arguments are provided, will print help and exit
