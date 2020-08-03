@@ -7,21 +7,21 @@ LABEL author="m.galland@uva.nl" \
       rversion="3.6.0"
 
 
-WORKDIR /home/gwas/
-
-# add R scripts 
-COPY ["./gwas.R",  "./load_dependencies.R", "./vcf2genotypes.R", "/home/gwas/"]
-
 # R packages. 
 RUN R -e "install.packages('yaml')" \
       && R -e "install.packages('doParallel', version = '1.0.14')" \
       && R -e "install.packages('vcfR')" \
+      && R -e "install.packages('optparse')" \
       && R -e "devtools::install_git('https://gitlab.com/CarlBrunius/MUVR.git')" 
       
 
 # if no arguments are provided, will print help and exit
 # additional arguments will be appended to the command
 ENV PATH="/home/gwas/:$PATH"
+
+# add R scripts 
+WORKDIR /home/gwas/
+COPY ["./gwas.R",  "./load_dependencies.R", "./vcf2genotypes.R", "/home/gwas/"]
 
 #ENTRYPOINT ["Rscript gwas.R"]
 

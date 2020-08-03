@@ -1,4 +1,6 @@
 convert_vcf_to_genotypes <- function(vcf_object = vcf){
+  suppressPackageStartupMessages(library("tidyr"))
+  suppressPackageStartupMessages(library("dplyr"))
   
   # Convert genotypes to a matrix of alleles
   genotypes <- extract.gt(vcf,
@@ -20,11 +22,11 @@ convert_vcf_to_genotypes <- function(vcf_object = vcf){
   
   # convert factor-encoded alleles to character
   genotypes = genotypes %>% 
-    pivot_longer(cols = - id, 
+    tidyr::pivot_longer(cols = - id, 
                  names_to = "SNP", 
                  values_to = "alleles") %>% 
     mutate(alleles = as.character(alleles)) %>% 
-    pivot_wider(id_cols = "id", 
+    tidyr::pivot_wider(id_cols = "id", 
                 names_from = "SNP", 
                 values_from = "alleles", )
   

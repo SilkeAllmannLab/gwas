@@ -40,6 +40,13 @@ if ("tibble" %in% installed.packages()){
   suppressPackageStartupMessages(library("tibble"))
 }
 
+if ("ggplot2 " %in% installed.packages()){
+  library("ggplot2")
+} else {
+  install.packages("ggplot2")
+  library("ggplot2")
+}
+
 if ("vcfR" %in% installed.packages()){
   suppressPackageStartupMessages(library("vcfR"))
 } else {
