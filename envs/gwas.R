@@ -3,8 +3,7 @@
 ##############################
 # Section 0: load libraries
 ##############################
-source("load_muvr_dependencies.R")
-library("tibble")
+source("load_dependencies.R")
 
 # create parser 
 option_list = list(

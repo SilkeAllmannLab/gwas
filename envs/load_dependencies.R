@@ -15,7 +15,6 @@ if ("yaml" %in% installed.packages()){
   library("yaml")
 }
 
-
 if ("MUVR" %in% installed.packages()){
   library("MUVR")
 } else {
@@ -32,42 +31,18 @@ if ("doParallel" %in% installed.packages()){
   suppressPackageStartupMessages(library("doParallel"))
 }
 
-if ("tidyr" %in% installed.packages()){
-  suppressPackageStartupMessages(library("tidyr"))
-} else {
-  library("devtools")
-  devtools::install_github("tidyverse/tidyr")
-  suppressPackageStartupMessages(library("tidyr"))
-}
 
 if ("tibble" %in% installed.packages()){
   suppressPackageStartupMessages(library("tibble"))
 } else {
-  library("tibble")
-  install_version("devtools", version = "3.0.0")
+  library("devtools")
+  install_version("tibble", version = "3.0.0")
   suppressPackageStartupMessages(library("tibble"))
-}
-
-if ("ggplot2" %in% installed.packages()){
-  suppressPackageStartupMessages(library("ggplot2"))
-} else {
-  library("devtools")
-  install_version("ggplot2", version = "3.3.0")
-  suppressPackageStartupMessages(library("ggplot2"))
-}
-
-if ("dplyr" %in% installed.packages()){
-  suppressPackageStartupMessages(library("dplyr"))
-} else {
-  library("devtools")
-  install_version("dplyr", version = "0.8.5")
-  suppressPackageStartupMessages(library("dplyr"))
 }
 
 if ("vcfR" %in% installed.packages()){
   suppressPackageStartupMessages(library("vcfR"))
 } else {
-  library("devtools")
-  install_version("vcfR", version = "1.11.0")
+  install.packages("vcfR")
   suppressPackageStartupMessages(library("vcfR"))
 }
