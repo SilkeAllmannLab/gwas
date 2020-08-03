@@ -32,24 +32,11 @@ convert_vcf_to_genotypes <- function(vcf_object = vcf){
   genotypes = na.omit(genotypes)
   
   
-  # convert factor-encoded alleles to character
-  genotypes = genotypes %>% 
-    pivot_longer(cols = - id, 
-                 names_to = "SNP", 
-                 values_to = "alleles") %>% 
-    mutate(alleles = as.character(alleles)) %>% 
-    pivot_wider(id_cols = "id", 
-                names_from = "SNP", 
-                values_from = "alleles")
-  
-  # remove NAs as they are not accepted by MUVR
-  genotypes = na.omit(genotypes)
-  
   # convert to numbers
-  genotypes[genotypes == "0|0"] <- 0
-  genotypes[genotypes == "1|1"] <- 2
-  genotypes[genotypes == "1|0"] <- 1
-  genotypes[genotypes == "0|1"] <- 1
+  genotypes[genotypes == "0|0"] <- "0"
+  genotypes[genotypes == "1|1"] <- "2"
+  genotypes[genotypes == "1|0"] <- "1"
+  genotypes[genotypes == "0|1"] <- "1"
   
   return(genotypes)
 }

@@ -40,6 +40,14 @@ if ("tidyr" %in% installed.packages()){
   suppressPackageStartupMessages(library("tidyr"))
 }
 
+if ("tibble" %in% installed.packages()){
+  suppressPackageStartupMessages(library("tibble"))
+} else {
+  library("tibble")
+  install_version("devtools", version = "3.0.0")
+  suppressPackageStartupMessages(library("tibble"))
+}
+
 if ("ggplot2" %in% installed.packages()){
   suppressPackageStartupMessages(library("ggplot2"))
 } else {
