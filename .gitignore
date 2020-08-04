@@ -68,3 +68,12 @@ data/GMI.full_set.TAIR9.2011_08_04.tar.gz
 mran/
 rrblup/
 gwas.Rproj
+data/Arabidopsis_2029_Maf001_Filter80.3*
+data/chr01*
+data/data.header.vcf
+data/tair/
+data/Arabidopsis_2029_Maf001_Filter80.test30.SNPs.vcf.gz
+data/Arabidopsis_2029_Maf001_Filter80.test30_SNPs.vcf.gz
+data/header.vcf
+.rstudio/
+_martha/

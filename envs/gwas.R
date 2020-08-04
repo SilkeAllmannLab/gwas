@@ -3,9 +3,18 @@
 ##############################
 # Section 0: load libraries
 ##############################
-source("load_dependencies.R")
+#source("load_dependencies.R")
 
-# create parser 
+suppressPackageStartupMessages(library("optparse"))
+suppressPackageStartupMessages(library("MUVR"))
+suppressPackageStartupMessages(library("doParallel"))
+suppressPackageStartupMessages(library("tibble"))
+suppressPackageStartupMessages(library("vcfR"))
+
+
+##########################################
+# Section 0: parse command-line arguments 
+#########################################
 option_list = list(
   make_option(c("-v", "--vcf"), 
               type = "character", 
@@ -96,7 +105,6 @@ registerDoParallel(cl)
 
 # VCF file
 if (file.exists(args$vcf)){
-  cat()
   cat("\nVCF file:", args$vcf, " exists and will be converted to a genotype matrix\n")
 } else {
   stop("Please provide a valid path to a VCF file")

@@ -1,28 +1,17 @@
-FROM rocker/tidyverse:3.6.0
+FROM allmann/gwas-base:3.6
 
 LABEL author="m.galland@uva.nl" \
       description="A Docker image used to build a container usable for a Random Forest analysis to find SNPs related to a phenotype" \
       usage="docker run allmann/gwas:latest" \
       url="https://github.com/SilkeAllmannLab/gwas" \
-      rversion="3.6.0"
+      rversion="3.6.0"      
 
-
-# R packages. 
-RUN R -e "install.packages('yaml')" \
-      && R -e "install.packages('doParallel', version = '1.0.14')" \
-      && R -e "install.packages('vcfR')" \
-      && R -e "install.packages('optparse')" \
-      && R -e "devtools::install_git('https://gitlab.com/CarlBrunius/MUVR.git')" 
-      
-
-# if no arguments are provided, will print help and exit
-# additional arguments will be appended to the command
-ENV PATH="/home/gwas/:$PATH"
 
 # add R scripts 
-WORKDIR /home/gwas/
-COPY ["./gwas.R",  "./load_dependencies.R", "./vcf2genotypes.R", "/home/gwas/"]
+WORKDIR /home/
+COPY ["./gwas.R",  "/home/"]
+COPY ["./vcf2genotypes.R", "/home/"]
 
-#ENTRYPOINT ["Rscript gwas.R"]
+ENTRYPOINT ["Rscript", "/home/gwas.R"]
 
 
