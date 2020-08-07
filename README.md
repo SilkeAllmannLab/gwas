@@ -25,6 +25,8 @@ A pipeline to relate Single Nucleotide Polymorphisms (SNPs) to a continuous phen
 	- [:writing\_hand: Authors](#writing_hand-authors)
 	- [vcfR](#vcfr)
 	- [MUVR](#muvr)
+- [5. Troubleshooting](#5-troubleshooting)
+	- [RAINBOWR package](#rainbowr-package)
 
 <!-- /MarkdownTOC -->
 
@@ -77,15 +79,23 @@ In the Shell, type `git clone https://github.com/SilkeAllmannLab/gwas.git`
 All input data are to be found in `data/`.
 
 ### VCF dataset
-The VCF data from a study from [Arouisse et al. 2019](https://onlinelibrary.wiley.com/doi/full/10.1111/tpj.14659).
-
+The VCF data from a study from [Arouisse et al. 2019](https://onlinelibrary.wiley.com/doi/full/10.1111/tpj.14659).  
 The VCF file itself can be downloaded directly from [FigShare (file is called "Arabidopsis_2029_Maf001_Filter80")](https://figshare.com/projects/Imputation_of_3_million_SNPs_in_the_Arabidopsis_regional_mapping_population/72887).
+
+Number of SNPs per chromosome:
+
+| chrom | # of SNPs |
+|-------|-----------|
+| chr01 | 734,401   |
+| chr02 | 513,750   |
+| chr03 | 616,986   |
+| chr04 | 496,272   |
+| chr05 | 661,335   |
 
 Several files were then generated from this initial big VCF file:
 - __Chromosome VCF files__: for instance, for chromosome 1,`chr01.Arabidopsis_2029_Maf001_Filter80.vcf.gz`
 - __Randomly subsampled chromosome VCF files__: 10% or more of the initial SNPs were subsampled and extracted on a per-chromosome basis. For instance, for chromosome 1,`chr01.subsampled_10_percent.Arabidopsis_2029_Maf001_Filter80.vcf.gz`
 - __Test file__: a small subset available for testing purposes. It can be found at `data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf`.
-
 
 
 __Examples of code used:__    
@@ -129,6 +139,13 @@ The R package vcfR is heavily described [here](https://knausb.github.io/vcfR_doc
 
 ## MUVR
 The MUVR package for R is described [here](https://gitlab.com/CarlBrunius/MUVR).
+
+# 5. Troubleshooting
+
+## RAINBOWR package
+Sometimes, you might have issues with the installation of the `Rccp` package which is a dependency of `RAINBOWR`.
+
+In the Shell, try: `apt-get install r-base-dev`
 
 
 
