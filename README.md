@@ -100,9 +100,12 @@ Several files were then generated from this initial big VCF file:
 
 __Examples of code used:__    
 
-To subsample 10% of the original chr01 VCF file (from \~700,000 variants to 7000)  
+To subsample 10% of the original VCF file restricted to chromosome 4 (from \~490,000 variants to 49,000):    
 ```
-gzip -c -d chr01.Arabidopsis_2029_Maf001_Filter80.vcf.gz |vcfrandomsample -r 0.01 -p 31 > chr01.subsampled_1_percent.Arabidopsis_2029_Maf001_Filter80.vcf
+gzip -c -d VCF_chr04.recode.vcf.gz |tail -n +16|shuf -n 49000 > chr04.49k_SNPs.no_header.vcf \
+  && cat VCF.header.txt chr04.49k_SNPs.no_header.vcf > chr04.49k_SNPs.vcf \
+  && gzip chr04.49k_SNPs.vcf \
+  && rm  chr04.49k_SNPs.no_header.vcf 
 ```
 
 To create one VCF file for each Arabidopsis chromosome:  
