@@ -1,6 +1,8 @@
-# From SNPs to phenotype using Random Forest 
+# From SNPs to phenotype 
 
-A pipeline to relate Single Nucleotide Polymorphisms (SNPs) to a continuous phenotype using a Random Forest approach from the `MUVR` package. It is meant to perform a similar analysis as Genome Wide Analysis (GWAS) using genetic variant (Variant Call Format) and phenotype information. Yet, it brings the power and accuracy of the Machine Learning Random Forest approach. 
+A pipeline to relate Single Nucleotide Polymorphisms (SNPs) to a continuous phenotype using either a Random Forest approach from the `MUVR` package or a canonical GWAS pipeline from `RAINBOWR`.
+
+Both methods will perform a Genome Wide Analysis (GWAS) using genetic variant (Variant Call Format) and phenotype information. 
 
  
 <!-- MarkdownTOC autolink="true" levels="1,2,3" -->
@@ -9,9 +11,10 @@ A pipeline to relate Single Nucleotide Polymorphisms (SNPs) to a continuous phen
 	- [Inputs](#inputs)
 		- [VCF file](#vcf-file)
 		- [Phenotype file](#phenotype-file)
-	- [Outputs](#outputs)
-		- [Table of most important SNPs](#table-of-most-important-snps)
-		- [Plot of the model Q2](#plot-of-the-model-q2)
+	- [Common outputs](#common-outputs)
+	- [Distinct outputs](#distinct-outputs)
+		- [Random Forest](#random-forest)
+		- [GWAS RAINBOWR](#gwas-rainbowr)
 - [2. Installation](#2-installation)
 	- [Install RStudio](#install-rstudio)
 	- [Clone the repository](#clone-the-repository)
@@ -24,13 +27,14 @@ A pipeline to relate Single Nucleotide Polymorphisms (SNPs) to a continuous phen
 - [4. References](#4-references)
 	- [:writing\_hand: Authors](#writing_hand-authors)
 	- [vcfR](#vcfr)
-	- [MUVR](#muvr)
+	- [RAINBOWR](#rainbowr)
 - [5. Troubleshooting](#5-troubleshooting)
 	- [RAINBOWR package](#rainbowr-package)
 
 <!-- /MarkdownTOC -->
 
 # 1. Inputs and outputs
+Both MUVR Random Forest and RAINBOWR methods use the same input files (VCF and phenotype). They also have similar outputs (table of significant SNPs) with some disctint graphs and tables. 
 
 ## Inputs
 
@@ -53,13 +57,17 @@ A tabulated separated file containing two columns:
 2. A phenotype column that contains the phenotypic values. Column name should be `phenotype` 
 
 
-## Outputs
+## Common outputs
 
-### Table of most important SNPs
-A table of the most important SNPs related to the phenotype along with their p-values.
+__Table of most important SNPs__: a table of the most important SNPs related to the phenotype along with their p-values.
 
-### Plot of the model Q2
-A plot of the model Q2 metric compared to a distribution of random Q2 values obtained using N permutations (e.g. N = 100).
+## Distinct outputs
+
+### Random Forest
+* __Plot of the model Q2:__ a plot of the model Q2 metric compared to a distribution of random Q2 values obtained using N permutations (e.g. N = 100).
+
+### GWAS RAINBOWR
+* __Manhattan plot:__ a plot of the SNP chromosome position (x-axis) against the $$-log_{10}$$ of the computed p-value of each SNP. 
 
 
 # 2. Installation 
@@ -140,8 +148,8 @@ A `root_data_fid_and_names.tsv` file contains the genotype line identifier and t
 ## vcfR
 The R package vcfR is heavily described [here](https://knausb.github.io/vcfR_documentation/index.html).
 
-## MUVR
-The MUVR package for R is described [here](https://gitlab.com/CarlBrunius/MUVR).
+## RAINBOWR
+The RAINBOWR package for R is described [here](https://github.com/KosukeHamazaki/RAINBOWR).
 
 # 5. Troubleshooting
 

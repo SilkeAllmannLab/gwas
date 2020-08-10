@@ -30,9 +30,8 @@ convert_vcf_to_genotypes <- function(vcf_object = vcf){
                 names_from = "SNP", 
                 values_from = "alleles", )
   
-  # remove NAs as they are not accepted by MUVR
+  # remove NAs as they are not accepted
   genotypes = na.omit(genotypes)
-  
   
   # convert to numbers
   genotypes[genotypes == "0|0"] <- "-1"

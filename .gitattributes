@@ -1,3 +1,4 @@
 *.smk linguist-language=Python
 Snakefile linguist-language=Python
 data/chr1_Arabidopsis_2029_Maf001_Filter80.10k_lines.vcf filter=lfs diff=lfs merge=lfs -text
+*vcf.gz filter=lfs diff=lfs merge=lfs -text

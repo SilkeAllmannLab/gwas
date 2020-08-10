@@ -1,8 +1,8 @@
-require(RAINBOWR)
+library(RAINBOWR)
 #> Loading required package: RAINBOWR
 
 ### Load example datasets
-data("Rice_Zhao_etal")
+load("rainbowr/Rice_Zhao_etal.rda")
 Rice_geno_score <- Rice_Zhao_etal$genoScore
 Rice_geno_map <- Rice_Zhao_etal$genoMap
 Rice_pheno <- Rice_Zhao_etal$pheno

@@ -3,6 +3,8 @@ suppressPackageStartupMessages(library("vcfR"))
 suppressPackageStartupMessages(library("tidyr"))
 suppressPackageStartupMessages(library("dplyr"))
 suppressPackageStartupMessages(library("rrBLUP"))
+suppressPackageStartupMessages(library("RAINBOWR"))
+suppressPackageStartupMessages(library("ggplot2"))
 
 
 #######################
@@ -25,7 +27,9 @@ phenotypes <- read.delim("data/root_data_fid_and_names.tsv", header = TRUE) %>%
 
 source("rainbowr/vcf2genotypes_for_rainbowr.R")
 
-vcf <- read.vcfR("data/Arabidopsis_2029_Maf001_Filter80.test30_SNPs.vcf.gz",
+vcf_file_path <- "data/chr05.66k_SNPs.vcf.gz"
+
+vcf <- read.vcfR(vcf_file_path,
                  verbose = TRUE,
                  nrows = -1,
                  convertNA = TRUE,
@@ -40,8 +44,8 @@ geno_map = vcf@fix %>%
   as.data.frame() %>% 
   dplyr::select(ID, CHROM, POS) %>% 
   mutate(ID = as.character(ID),
-         CHROM = as.numeric(CHROM),
-         POS = as.numeric(POS))
+         CHROM = as.numeric(as.character(CHROM)), 
+         POS = as.numeric(as.character(POS)))
 
 
 #####################################
@@ -61,5 +65,47 @@ zeta_matrix <- gwas_ready_df$ZETA
 gwas_results <- RGWAS.normal(
   pheno = pheno_ready_for_gwas, 
   geno = geno_ready_for_gwas,
-  ZETA = zeta_matrix)
+  ZETA = zeta_matrix, 
+  plot.qq = FALSE, 
+  plot.Manhattan = FALSE, 
+  method.thres = "Bonferroni",
+  min.MAF = 0.05)
 
+##################
+# Section 4: plots
+##################
+title4plot <- strsplit(x = basename(vcf_file_path),
+                       split = ".vcf.gz")
+
+### custom Manhattan plot
+fdr_threshold <- gwas_results$thres
+gwas_results <- gwas_results$D
+
+points_to_label = 
+  gwas_results %>% 
+  filter(phenotype > fdr_threshold) 
+
+p <- gwas_results %>% 
+  ggplot(., aes(x = pos, y = phenotype)) +
+  geom_point() +
+  geom_hline(yintercept = fdr_threshold, color = "blue") +
+  ggtitle(title4plot) +
+  labs(x = "position", y = "-log10(p-value)") +
+  ggrepel::geom_label_repel(data = points_to_label, 
+                            aes(x = pos, 
+                                y = phenotype, 
+                                label = marker))
+
+ggsave(filename = paste("results/",title4plot,".png", sep = ""), plot = p)
+ggsave(filename = paste("results/",title4plot,".pdf", sep = ""), plot = p)
+
+##########################
+# Section 5: table of SNPs
+##########################
+gwas_results %>% 
+  filter(phenotype > fdr_threshold) %>% 
+  write.table(., 
+              file = paste("results/",title4plot,".tsv", sep = ""), 
+              quote = F, 
+              sep = "\t", 
+              row.names = F)

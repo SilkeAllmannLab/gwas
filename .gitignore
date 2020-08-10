@@ -77,3 +77,5 @@ data/Arabidopsis_2029_Maf001_Filter80.test30_SNPs.vcf.gz
 data/header.vcf
 .rstudio/
 _martha/
+results/
+results/*
