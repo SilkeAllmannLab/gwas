@@ -22,8 +22,9 @@ Both methods will perform a Genome Wide Analysis (GWAS) using genetic variant (V
 	- [Example datasets](#example-datasets)
 		- [VCF dataset](#vcf-dataset)
 		- [Phenotypes](#phenotypes)
-	- [Test run](#test-run)
-	- [Run the random_forest_gwas.R script](#run-the-random_forest_gwasr-script)
+	- [Test runs](#test-runs)
+		- [Random Forest](#random-forest-1)
+		- [RAINBOWR GWAS](#rainbowr-gwas)
 - [4. References](#4-references)
 	- [:writing\_hand: Authors](#writing_hand-authors)
 	- [vcfR](#vcfr)
@@ -80,7 +81,7 @@ In the Shell, type `git clone https://github.com/SilkeAllmannLab/gwas.git`
 
 :tada: :confetti_ball:  That's it! :tada: :confetti_ball:
 
-# 3. Test
+# 3. Test 
 
 ## Example datasets
 
@@ -128,14 +129,15 @@ done
 A `root_data_fid_and_names.tsv` file contains the genotype line identifier and the phenotypic values. Arabidopsis ecotypes were treated with 2-E-hexanal and their main root length measured. A response ratio was then calculated for each of the ecotypes by comparing the 2-E-hexanal treatment with a mock (methanol).
 
 
-## Test run
+## Test runs
 
-## Run the random_forest_gwas.R script
-- Open RStudio.
-- In RStudio, select "File > New Project". 
-- Open the `gwas.R` script. 
-- Run the script.  
+### Random Forest
+- Open a new Shell window.
+- Execute the random forest script: `Rscript random_forest/gwas.R --help` to see the full list of arguments. 
 
+### RAINBOWR GWAS
+- Open RStudio
+- Run the `rainbowr/rainbowr.R` script. Make sure you specify a valid VCF file path and phenotype file.   
 
 # 4. References 
 
