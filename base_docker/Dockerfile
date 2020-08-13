@@ -12,5 +12,5 @@ RUN R -e "install.packages('doParallel', version = '1.0.14')" \
       && R -e "install.packages('vcfR')" \
       && R -e "install.packages('optparse')" \
       && R -e "devtools::install_git('https://gitlab.com/CarlBrunius/MUVR.git')" \
-      && R -e "install.packages('RAINBOWR')   
+      && R -e "install.packages('RAINBOWR')"   
       
