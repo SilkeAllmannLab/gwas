@@ -7,12 +7,38 @@ suppressPackageStartupMessages(library("RAINBOWR"))
 suppressPackageStartupMessages(library("ggplot2"))
 
 
+########################
+# Command line arguments
+########################
+
+option_list = list(
+  make_option(c("-v", "--vcf"), 
+              type = "character", 
+              default = "data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf", 
+              help="Path to VCF file. Can be gzipped (.gz)", 
+              metavar="filename"),
+  make_option(c("-p", "--phenotype"), 
+              type = "character", 
+              default = "data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf", 
+              help="Path to the phenotype file. One column with line identifier and one with phenotypic value. Tab-separated.", 
+              metavar="filename"),
+  make_option(c("-o", "--outdir"), 
+              type="character", 
+              default="gwas_results", 
+              help="output directory where to store results [default= %default]", 
+              metavar="character"),
+) 
+opt_parser = OptionParser(option_list=option_list,
+                          description = "\n A program to perform a Random Forest analysis based on the MUVR R package ",
+                          epilogue = "Please visit https://cran.r-project.org/web//packages/MVR/MVR.pdf and https://github.com/BleekerLab/random_forest_with_muvr for additional information");
+args = parse_args(opt_parser)
+
 #######################
 # Section 1: phenotypes
 # Import phenotype file   
 #######################
 
-phenotypes <- read.delim("data/root_data_fid_and_names.tsv", header = TRUE) %>% 
+phenotypes <- read.delim(args$phenotype, header = TRUE) %>% 
   select(id, phenotype) %>% 
   na.omit() %>% 
   mutate(id = as.character(id)) %>% 
@@ -27,7 +53,7 @@ phenotypes <- read.delim("data/root_data_fid_and_names.tsv", header = TRUE) %>%
 
 source("rainbowr/vcf2genotypes_for_rainbowr.R")
 
-vcf_file_path <- "data/chr05.66k_SNPs.vcf.gz"
+vcf_file_path <- args$vcf
 
 vcf <- read.vcfR(vcf_file_path,
                  verbose = TRUE,
@@ -81,31 +107,45 @@ title4plot <- strsplit(x = basename(vcf_file_path),
 fdr_threshold <- gwas_results$thres
 gwas_results <- gwas_results$D
 
-points_to_label = 
-  gwas_results %>% 
-  filter(phenotype > fdr_threshold) 
+if (nrow(points_to_label) == 0){
+  cat("no signficant SNPs related to the phenotype detected.")
+} else {
+  points_to_label = 
+    gwas_results %>% 
+    filter(phenotype > fdr_threshold)
+  
+  p <- gwas_results %>% 
+    ggplot(., aes(x = pos, y = phenotype)) +
+    geom_point() +
+    geom_hline(yintercept = fdr_threshold, color = "blue") +
+    ggtitle(title4plot) +
+    labs(x = "position", y = "-log10(p-value)") +
+    ggrepel::geom_label_repel(data = points_to_label, 
+                              aes(x = pos, 
+                                  y = phenotype, 
+                                  label = marker))
+  
+  ggsave(filename = paste(args$outdir, title4plot, ".png", sep = ""), plot = p, width = 10, height = 7)
+  ggsave(filename = paste(args$outdir, title4plot, ".pdf", sep = ""), plot = p, width = 10, height = 7)
+}
 
-p <- gwas_results %>% 
-  ggplot(., aes(x = pos, y = phenotype)) +
-  geom_point() +
-  geom_hline(yintercept = fdr_threshold, color = "blue") +
-  ggtitle(title4plot) +
-  labs(x = "position", y = "-log10(p-value)") +
-  ggrepel::geom_label_repel(data = points_to_label, 
-                            aes(x = pos, 
-                                y = phenotype, 
-                                label = marker))
-
-ggsave(filename = paste("results/",title4plot,".png", sep = ""), plot = p)
-ggsave(filename = paste("results/",title4plot,".pdf", sep = ""), plot = p)
 
 ##########################
 # Section 5: table of SNPs
 ##########################
-gwas_results %>% 
+if (nrow(points_to_label) == 0){
+  file_connection <- file(paste(args$outdir, title4plot, ".tsv", sep = ""))
+  writeLines(text = "no signficant SNPs related to the phenotype detected.",
+             con = file_connection)
+  close(file_connection)
+} else {
+  gwas_results %>% 
   filter(phenotype > fdr_threshold) %>% 
   write.table(., 
-              file = paste("results/",title4plot,".tsv", sep = ""), 
+              file = paste(args$outdir, title4plot, ".tsv", sep = ""), 
               quote = F, 
               sep = "\t", 
               row.names = F)
+}
+
+
