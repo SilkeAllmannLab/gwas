@@ -7,10 +7,11 @@ LABEL author="m.galland@uva.nl" \
       rversion="3.6.3"
 
 # R packages. 
-RUN R -e "install.packages('doParallel', version = '1.0.14')" \
-      && R -e "install.packages('vcfR')" \
-      && R -e "install.packages('optparse')" \
-      && R -e "install.packages('RAINBOWR')"   
+RUN R -e "install.packages('vcfR')"
+
+RUN R -e "install.packages('optparse')" 
+
+RUN R -e "install.packages('RAINBOWR')"   
 
       
 WORKDIR /home/
