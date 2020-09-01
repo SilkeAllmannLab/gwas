@@ -6,6 +6,9 @@ LABEL author="m.galland@uva.nl" \
       url="https://github.com/SilkeAllmannLab/gwas" \
       rversion="3.6.3"
 
+# install devtools first
+RUN R -e "install.packages('devtools', dependencies=TRUE)" 
+
 # R packages. 
 RUN R -e "install.packages('doParallel', version = '1.0.14')" \
       && R -e "install.packages('vcfR')" \
