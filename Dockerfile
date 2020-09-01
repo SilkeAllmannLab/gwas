@@ -18,4 +18,4 @@ WORKDIR /home/
 COPY ["./rainbowr_gwas.R",  "/home/"]
 COPY ["./scripts/vcf2genotypes.R", "/home/"]
 
-ENTRYPOINT ["Rscript", "/home/rainbowr_gwas.R"]
+#ENTRYPOINT ["Rscript", "/home/rainbowr_gwas.R"]

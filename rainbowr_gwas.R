@@ -2,7 +2,6 @@ suppressPackageStartupMessages(library("tibble"))
 suppressPackageStartupMessages(library("vcfR"))
 suppressPackageStartupMessages(library("tidyr"))
 suppressPackageStartupMessages(library("dplyr"))
-suppressPackageStartupMessages(library("rrBLUP"))
 suppressPackageStartupMessages(library("RAINBOWR"))
 suppressPackageStartupMessages(library("ggplot2"))
 
