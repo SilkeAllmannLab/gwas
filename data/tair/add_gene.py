@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
+# Usage: python add_gene.py chrom_pos_marker.tsv chr01_start_end_gene.tsv chr01_genes_with_marker.tsv
 
 # In[1]:
 
