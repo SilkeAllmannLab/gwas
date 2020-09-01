@@ -8,12 +8,8 @@ LABEL author="m.galland@uva.nl" \
 
 # R packages. 
 RUN R -e "install.packages('doParallel', version = '1.0.14')" \
-# install devtools first
-      && R -e "install.packages('devtools', dependencies=TRUE)" \
       && R -e "install.packages('vcfR')" \
       && R -e "install.packages('optparse')" \
-      && R -e "library('devtools')" \
-      && R -e "devtools::install_git('https://gitlab.com/CarlBrunius/MUVR.git')" \
       && R -e "install.packages('RAINBOWR')"   
 
       
