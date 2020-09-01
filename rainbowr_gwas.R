@@ -2,8 +2,10 @@ suppressPackageStartupMessages(library("tibble"))
 suppressPackageStartupMessages(library("vcfR"))
 suppressPackageStartupMessages(library("tidyr"))
 suppressPackageStartupMessages(library("dplyr"))
+suppressPackageStartupMessages(library("rrBLUP"))
 suppressPackageStartupMessages(library("RAINBOWR"))
 suppressPackageStartupMessages(library("ggplot2"))
+suppressPackageStartupMessages(library("optparse"))
 
 
 ########################
@@ -25,11 +27,11 @@ option_list = list(
               type="character", 
               default="gwas_results", 
               help="output directory where to store results [default= %default]", 
-              metavar="character"),
+              metavar="character")
 ) 
 opt_parser = OptionParser(option_list=option_list,
-                          description = "\n A program to perform a Random Forest analysis based on the MUVR R package ",
-                          epilogue = "Please visit https://cran.r-project.org/web//packages/MVR/MVR.pdf and https://github.com/BleekerLab/random_forest_with_muvr for additional information");
+                          description = "\n A program to perform a GWAS analysis based on the RAINBOWR package for R",
+                          epilogue = "Please visit https://cran.r-project.org/web/packages/RAINBOWR/index.html and https://github.com/SilkeAllmannLab/gwas for additional information");
 args = parse_args(opt_parser)
 
 #######################
@@ -50,7 +52,7 @@ phenotypes <- read.delim(args$phenotype, header = TRUE) %>%
 # Creates the physical map of markers
 #####################################
 
-source("rainbowr/vcf2genotypes_for_rainbowr.R")
+source("scripts/vcf2genotypes.R")
 
 vcf_file_path <- args$vcf
 
