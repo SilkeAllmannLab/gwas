@@ -1,4 +1,4 @@
-FROM rocker/r-base:3.6.3
+FROM rocker/r-ver:3.6.3
 
 LABEL author="m.galland@uva.nl" \
       description="A Docker image used to build a container usable for a Random Forest analysis to find SNPs related to a phenotype" \
