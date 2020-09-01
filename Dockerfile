@@ -7,13 +7,13 @@ LABEL author="m.galland@uva.nl" \
       rversion="3.6.3"
 
 # install devtools first
-RUN R -e "install.packages('devtools', dependencies=TRUE)" 
+RUN R -e "install.packages('remotes', dependencies=TRUE)" 
 
 # R packages. 
 RUN R -e "install.packages('doParallel', version = '1.0.14')" \
       && R -e "install.packages('vcfR')" \
       && R -e "install.packages('optparse')" \
-      && R -e "devtools::install_git('https://gitlab.com/CarlBrunius/MUVR.git')" \
+      && R -e "remotes::install_git('https://gitlab.com/CarlBrunius/MUVR.git')" \
       && R -e "install.packages('RAINBOWR')"   
 
       
