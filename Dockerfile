@@ -10,6 +10,8 @@ LABEL author="m.galland@uva.nl" \
 # R packages. 
 RUN R -e "install.packages('vcfR')" \
  && R -e "install.packages('optparse')" \
+ && R -e "install.packages('BiocManager')" \
+ && R -e "BiocManager::install('ggtree')" \
  && R -e "devtools::install_github('KosukeHamazaki/RAINBOWR')" 
 
 
