@@ -11,7 +11,8 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   libudunits2-dev \
   apt-utils \
   libmagick++-dev \
-  libglu1-mesa-dev 
+  libglu1-mesa-dev  \
+  libgdal-dev
 
 # R packages. 
 RUN R -e "install.packages('vcfR')" \
