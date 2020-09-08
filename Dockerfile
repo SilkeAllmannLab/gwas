@@ -6,7 +6,10 @@ LABEL author="m.galland@uva.nl" \
       url="https://github.com/SilkeAllmannLab/gwas" \
       rversion="3.6.3"
 
-
+# package units (for RAINBOWR)
+RUN apt-get update -qq && apt-get -y --no-install-recommends install \
+  libudunits2-dev 
+  
 # R packages. 
 RUN R -e "install.packages('vcfR')" \
  && R -e "install.packages('optparse')" \
