@@ -1,19 +1,17 @@
-FROM rocker/r-ver:3.6.3
+FROM rocker/tidyverse:3.6.3
 
 LABEL author="m.galland@uva.nl" \
-      description="A Docker image used to build a container usable for a Random Forest analysis to find SNPs related to a phenotype" \
+      description="A Docker image used to build a container usable for a GWAS analysis to find SNPs related to a phenotype" \
       usage="docker run allmann/gwas:latest" \
       url="https://github.com/SilkeAllmannLab/gwas" \
       rversion="3.6.3"
 
+
 # R packages. 
-RUN R -e "install.packages('vcfR')"
- 
-RUN R -e "install.packages('optparse')" 
+RUN R -e "install.packages('vcfR')" \
+ && R -e "install.packages('optparse')" \
+ && R -e "devtools::install_github('KosukeHamazaki/RAINBOWR')" 
 
-RUN R -e "install.packages('RAINBOWR')" 
-
-RUN R -e "install.packages('rgl')"
 
       
 WORKDIR /home/
