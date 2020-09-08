@@ -16,7 +16,7 @@ convert_vcf_to_genotypes <- function(vcf_object = vcf){
   snp_names = as.vector(
     sapply(
       names(genotypes[2:length(names(genotypes))]),
-      function(x){paste("SNP",x,sep = "_")})
+      function(x){paste("SNP",x, sep = "_")})
   )
   colnames(genotypes) = c("id", snp_names)
   
