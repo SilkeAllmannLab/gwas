@@ -19,7 +19,7 @@ option_list = list(
               metavar="filename"),
   make_option(c("-p", "--phenotype"), 
               type = "character", 
-              default = "data/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf", 
+              default = "data/root_data_fid_and_names.tsv", 
               help="Path to the phenotype file. One column with line identifier and one with phenotypic value. Tab-separated.", 
               metavar="filename"),
   make_option(c("-o", "--outdir"), 
@@ -107,7 +107,11 @@ title4plot <- strsplit(x = basename(vcf_file_path),
 fdr_threshold <- gwas_results$thres
 gwas_results <- gwas_results$D
 
-if (nrow(points_to_label) == 0){
+n_points_to_label = 
+  filter(gwas_results, phenotype >= fdr_threshold) %>% 
+  nrow()
+
+if (n_points_to_label == 0){
   cat("no signficant SNPs related to the phenotype detected.")
 } else {
   points_to_label = 
@@ -133,7 +137,7 @@ if (nrow(points_to_label) == 0){
 ##########################
 # Section 5: table of SNPs
 ##########################
-if (nrow(points_to_label) == 0){
+if (n_points_to_label == 0){
   file_connection <- file(paste(args$outdir, title4plot, ".tsv", sep = ""))
   writeLines(text = "no signficant SNPs related to the phenotype detected.",
              con = file_connection)
