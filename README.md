@@ -145,7 +145,7 @@ A `root_data_fid_and_names.tsv` file contains the genotype line identifier and t
 
 * Marc Galland (@mgalland)
 * Martha van Os (@MvanOs)
-* Machiel Clige (@BertusMuscari)
+* Machiel Clige (@MCligge)
 
 ## vcfR
 The R package vcfR is heavily described [here](https://knausb.github.io/vcfR_documentation/index.html).
