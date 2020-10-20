@@ -26,4 +26,4 @@ WORKDIR /rainbowr/
 COPY ["./rainbowr_gwas.R",  "/rainbowr/"]
 COPY ["./scripts/vcf2genotypes.R", "/rainbowr/"]
 
-CMD ["Rscript", "/rainbowr/rainbowr_gwas.R"]
+CMD ["Rscript", "/rainbowr/rainbowr_gwas.R", "--help"]
