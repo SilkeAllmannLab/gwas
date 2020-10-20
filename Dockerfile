@@ -12,9 +12,9 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
   apt-utils \
   libmagick++-dev \
   libglu1-mesa-dev  \
-  libgdal-dev \
-  tcl8.5-dev \
-  tk8.5-dev
+  libgdal-dev 
+#  tcl8.5-dev \
+#  tk8.5-dev
 
 # R packages. 
 RUN R -e "install.packages('vcfR')" \

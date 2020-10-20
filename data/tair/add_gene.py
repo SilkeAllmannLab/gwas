@@ -22,7 +22,6 @@ outfile = sys.argv[3]
 chrom_pos_marker = pd.read_csv(chrom_pos_marker_id_file_path,
     sep="\t",
     names=["chrom","pos","marker_id"])
-chrom_pos_marker.head(n = 2)
 
 
 # In[3]:
