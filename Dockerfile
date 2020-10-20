@@ -22,8 +22,8 @@ RUN R -e "install.packages('rgl')" \
 
 
       
-WORKDIR /home/
-COPY ["./rainbowr_gwas.R",  "/home/"]
-COPY ["./scripts/vcf2genotypes.R", "/home/"]
+WORKDIR /rainbowr/
+COPY ["./rainbowr_gwas.R",  "/rainbowr/"]
+COPY ["./scripts/vcf2genotypes.R", "/rainbowr/"]
 
-#ENTRYPOINT ["Rscript", "/home/rainbowr_gwas.R"]
+CMD ["Rscript", "/rainbowr/rainbowr_gwas.R"]
