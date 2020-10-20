@@ -1,4 +1,4 @@
-FROM rocker/verse:3.6.3
+FROM rocker/tidyverse:3.6.3
 
 LABEL author="m.galland@uva.nl" \
       description="A Docker image used to build a container usable for a GWAS analysis to find SNPs related to a phenotype" \
@@ -8,20 +8,17 @@ LABEL author="m.galland@uva.nl" \
 
 # package units (for RAINBOWR)
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-  libudunits2-dev \
-  apt-utils \
-  libmagick++-dev \
-  libglu1-mesa-dev  \
-  libgdal-dev 
-#  tcl8.5-dev \
-#  tk8.5-dev
+    libglu1-mesa-dev \
+    r-cran-rgl 
+
 
 # R packages. 
-RUN R -e "install.packages('vcfR')" \
+RUN R -e "install.packages('rgl')" \
+ && R -e "install.packages('vcfR')" \
  && R -e "install.packages('optparse')" \
  && R -e "install.packages('BiocManager')" \
  && R -e "BiocManager::install('ggtree')" \
- && R -e "devtools::install_github('KosukeHamazaki/RAINBOWR')" 
+ && R -e "install.packages('RAINBOWR')" 
 
 
       
