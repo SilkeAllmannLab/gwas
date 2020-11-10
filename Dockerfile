@@ -6,24 +6,21 @@ LABEL author="m.galland@uva.nl" \
       url="https://github.com/SilkeAllmannLab/gwas" \
       rversion="3.6.3"
 
-# package units (for RAINBOWR)
-RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-    libglu1-mesa-dev \
-    r-cran-rgl 
-
-
 # R packages. 
-RUN R -e "install.packages('rgl')" \
- && R -e "install.packages('vcfR')" \
+RUN R -e "install.packages('vcfR')" \
  && R -e "install.packages('optparse')" \
- && R -e "install.packages('BiocManager')" \
- && R -e "BiocManager::install('ggtree')" \
- && R -e "install.packages('RAINBOWR')" 
+ && R -e "install.packages('statgenGWAS')" 
 
 
-      
-WORKDIR /rainbowr/
+
+# add GWAS scripts     
+COPY ["./scripts/vcf2genotypes.R", "/rainbowr/scripts/"]
 COPY ["./rainbowr_gwas.R",  "/rainbowr/"]
-COPY ["./scripts/vcf2genotypes.R", "/rainbowr/"]
 
-CMD ["Rscript", "/rainbowr/rainbowr_gwas.R", "--help"]
+# Make the main script executable
+#RUN chmod +x /rainbowr/rainbowr_gwas.R
+
+# ENTRYPOINT specifies the default command (will always run)
+ENTRYPOINT ["Rscript", "/rainbowr/rainbowr_gwas.R"]
+# CMD can be overwritten e.g. by passing --vcf and --phenotype arguments
+CMD ["--help"]
