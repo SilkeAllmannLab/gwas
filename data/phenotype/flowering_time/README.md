@@ -1,7 +1,7 @@
 # Flowering time phenotype data
 
 ## Link
-[1001 genomes link](https://arapheno.1001genomes.org/phenotype/29/)
+[1001 genomes link](https://arapheno.1001genomes.org/ontology/PTO/TO:0002616)
 
 ## Citation
 
