@@ -20,7 +20,7 @@ source("scripts/creates_marker_map_from_vcf.R")
 option_list = list(
   make_option(c("-v", "--vcf"), 
               type = "character", 
-              default = "data/vcf/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf.gz", 
+              default = "data/vcf/Arabidopsis_2029_Maf001_Filter80.30k_SNPs.vcf.gz", 
               help="Path to VCF file. Can be gzipped (.gz)", 
               metavar="filename"),
   make_option(c("-p", "--phenotype"), 
@@ -32,7 +32,22 @@ option_list = list(
               type="character", 
               default="gwas_results", 
               help="output directory where to store results [default= %default]", 
-              metavar="character")
+              metavar="character"),
+  make_option(c("-m", "--maf"), 
+              type="numeric", 
+              default="0.05", 
+              help="Minor Allele Frequency (MAF). Value should be between 0 and 1. [default= %default]", 
+              ),
+  make_option(c("-g", "--n_miss_geno"), 
+              type = "numeric", 
+              default = 1,
+              help = "A numerical value between 0 and 1. Genotypes with a fraction of missing values higher than nMissGeno will be removed. Genotypes with only missing values will always be removed."
+              ),
+  make_option(c("-s", "--n_miss_snps"), 
+              type = "numeric", 
+              default = 1,
+              help = "A numerical value between 0 and 1. SNPs with a fraction of missing values higher than nMiss will be removed. SNPs with only missing values will always be removed."
+              )
 ) 
 opt_parser = OptionParser(option_list=option_list,
                           description = "\n A program to perform a GWAS analysis based on the statgenGWAS package for R",
@@ -44,7 +59,9 @@ args = parse_args(opt_parser)
 # Import phenotype file   
 #######################
 
-phenotypes <- read.delim(args$phenotype, header = TRUE)
+phenotypes <- read.delim(args$phenotype, header = TRUE) %>% 
+  mutate(genotype = as.character(genotype)) 
+
 
 #####################################
 # Section 2: VCF
@@ -88,4 +105,22 @@ marker_map = creates_marker_map_from_vcf(vcf_file = args$vcf)
 ###############################################
 ## Create a gData object containing map and marker information.
 my_gdata <- createGData(geno = marker_matrix_ready_for_statgen, 
-                          map = marker_map)
+                        map = marker_map, 
+                        pheno = phenotypes)
+
+###############################################################
+# Section 5: filter SNP data create the gData GWAS-ready object
+###############################################################
+
+my_gdata_snpfiltered <- codeMarkers(my_gdata, 
+                               nMiss = args$n_miss_snps, 
+                               MAF = args$maf,
+                               nMissGeno = args$n_miss_geno, 
+                               impute = FALSE,
+                               verbose = TRUE) 
+
+#########################
+# Section 6: perform GWAS
+#########################
+GWASDrops <- runSingleTraitGwas(gData = my_gdata_snpfiltered,
+                                traits = c("hexanal_ratio"))
