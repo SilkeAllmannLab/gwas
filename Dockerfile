@@ -9,18 +9,20 @@ LABEL author="m.galland@uva.nl" \
 # R packages. 
 RUN R -e "install.packages('vcfR')" \
  && R -e "install.packages('optparse')" \
- && R -e "install.packages('statgenGWAS')" 
-
+ && R -e "install.packages('statgenGWAS')" \
+ && R -e "install.packages('testit')" 
 
 
 # add GWAS scripts     
-COPY ["./scripts/vcf2genotypes.R", "/rainbowr/scripts/"]
-COPY ["./rainbowr_gwas.R",  "/rainbowr/"]
+COPY ["./scripts/creates_marker_matrix_from_vcf.R", "/gwas/scripts/"]
+COPY ["./scripts/filter_marker_matrix.R", "/gwas/scripts/"]
+COPY ["./scripts/convert_genotypes_to_integers.R", "/gwas/scripts/"]
+COPY ["./scripts/creates_marker_map_from_vcf.R", "/gwas/scripts/"]
+COPY ["./gwas.R",  "/gwas/"]
 
-# Make the main script executable
-#RUN chmod +x /rainbowr/rainbowr_gwas.R
 
 # ENTRYPOINT specifies the default command (will always run)
-ENTRYPOINT ["Rscript", "/rainbowr/rainbowr_gwas.R"]
+ENTRYPOINT ["Rscript", "/gwas/gwas.R"]
+
 # CMD can be overwritten e.g. by passing --vcf and --phenotype arguments
 CMD ["--help"]

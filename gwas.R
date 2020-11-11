@@ -20,7 +20,7 @@ source("scripts/creates_marker_map_from_vcf.R")
 option_list = list(
   make_option(c("-v", "--vcf"), 
               type = "character", 
-              default = "data/vcf/Arabidopsis_2029_Maf001_Filter80.30k_SNPs.vcf.gz", 
+              default = "data/vcf/Arabidopsis_2029_Maf001_Filter80.1000lines.vcf.gz", 
               help="Path to VCF file. Can be gzipped (.gz)", 
               metavar="filename"),
   make_option(c("-p", "--phenotype"), 
