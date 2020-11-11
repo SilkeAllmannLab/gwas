@@ -11,8 +11,7 @@ convert_vcf_to_genotypes <- function(vcf_object = vcf){
     as.data.frame() %>%
     rownames_to_column("id") 
   
-  # create a new vector of SNP names compatible with MUVR 
-  # No single number as variable identifier
+  # create a new vector of SNP names to avoid name errors in R
   snp_names = as.vector(
     sapply(
       names(genotypes[2:length(names(genotypes))]),
