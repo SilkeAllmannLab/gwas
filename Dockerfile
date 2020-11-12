@@ -13,12 +13,14 @@ RUN R -e "install.packages('vcfR')" \
  && R -e "install.packages('testit')" 
 
 
+WORKDIR /gwas/
+
 # add GWAS scripts     
 COPY ["./scripts/creates_marker_matrix_from_vcf.R", "/gwas/scripts/"]
 COPY ["./scripts/filter_marker_matrix.R", "/gwas/scripts/"]
 COPY ["./scripts/convert_genotypes_to_integers.R", "/gwas/scripts/"]
 COPY ["./scripts/creates_marker_map_from_vcf.R", "/gwas/scripts/"]
-COPY ["./gwas.R",  "/gwas/"]
+COPY ["./gwas.R", "/gwas/"]
 
 
 # ENTRYPOINT specifies the default command (will always run)
