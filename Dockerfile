@@ -12,13 +12,13 @@ RUN R -e "install.packages('vcfR')" \
  && R -e "install.packages('statgenGWAS')" \
  && R -e "install.packages('testit')" 
 
-RUN mkdir /gwas/
 
-# add GWAS scripts     
-COPY scripts/ /gwas/
-COPY gwas.R /gwas/
+# add GWAS scripts into a scripts/ folder
+COPY scripts/ ./ 
+RUN mkdir scripts/ \
+&& mv ./*.R scripts/
 
-WORKDIR /gwas/
+COPY gwas.R ./
 
 # ENTRYPOINT specifies the default command (will always run)
 ENTRYPOINT ["Rscript", "gwas.R"]
