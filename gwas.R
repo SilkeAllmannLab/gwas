@@ -122,5 +122,13 @@ my_gdata_snpfiltered <- codeMarkers(my_gdata,
 #########################
 # Section 6: perform GWAS
 #########################
-GWASDrops <- runSingleTraitGwas(gData = my_gdata_snpfiltered,
+gwas_results <- runSingleTraitGwas(gData = my_gdata_snpfiltered,
                                 traits = c("hexanal_ratio"))
+
+##############################
+# Section 7: save GWAS results
+##############################
+
+save(gwas_results, 
+     file = file.path(args$outdir, "gwas_results.RData")
+     )
