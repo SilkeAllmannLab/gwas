@@ -13,13 +13,10 @@ RUN R -e "install.packages('vcfR')" \
  && R -e "install.packages('testit')" 
 
 
-WORKDIR /gwas/
+RUN mkdir /gwas/
 
 # add GWAS scripts     
-COPY ["./scripts/creates_marker_matrix_from_vcf.R", "/gwas/scripts/"]
-COPY ["./scripts/filter_marker_matrix.R", "/gwas/scripts/"]
-COPY ["./scripts/convert_genotypes_to_integers.R", "/gwas/scripts/"]
-COPY ["./scripts/creates_marker_map_from_vcf.R", "/gwas/scripts/"]
+COPY ["./scripts/", "/gwas/scripts/"]
 COPY ["./gwas.R", "/gwas/"]
 
 
@@ -28,3 +25,5 @@ ENTRYPOINT ["Rscript", "/gwas/gwas.R"]
 
 # CMD can be overwritten e.g. by passing --vcf and --phenotype arguments
 CMD ["--help"]
+
+
