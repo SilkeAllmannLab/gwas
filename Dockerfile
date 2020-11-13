@@ -16,8 +16,8 @@ RUN R -e "install.packages('vcfR')" \
 RUN mkdir /gwas/
 
 # add GWAS scripts     
-COPY ["scripts/", "/gwas/scripts/"]
-COPY ["gwas.R", "/gwas/"]
+ADD ["scripts/", "/gwas/scripts/"]
+ADD ["gwas.R", "/gwas/"]
 
 
 WORKDIR /gwas/
