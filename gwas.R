@@ -128,7 +128,11 @@ gwas_results <- runSingleTraitGwas(gData = my_gdata_snpfiltered,
 ##############################
 # Section 7: save GWAS results
 ##############################
+dir.create(path = args$outdir, showWarnings = FALSE, recursive = TRUE)
+
 
 save(gwas_results, 
-     file = file.path(args$outdir, "gwas_results.RData")
+     file = file.path(args$outdir, "gwas_results.RData"),
+     compress = "gzip",
+     compression_level = 6
      )
