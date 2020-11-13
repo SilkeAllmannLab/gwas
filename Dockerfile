@@ -20,8 +20,10 @@ COPY ["./scripts/", "/gwas/scripts/"]
 COPY ["./gwas.R", "/gwas/"]
 
 
+WORKDIR /gwas/
+
 # ENTRYPOINT specifies the default command (will always run)
-ENTRYPOINT ["Rscript", "/gwas/gwas.R"]
+ENTRYPOINT ["Rscript", "gwas.R"]
 
 # CMD can be overwritten e.g. by passing --vcf and --phenotype arguments
 CMD ["--help"]
