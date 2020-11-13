@@ -12,13 +12,11 @@ RUN R -e "install.packages('vcfR')" \
  && R -e "install.packages('statgenGWAS')" \
  && R -e "install.packages('testit')" 
 
-
 RUN mkdir /gwas/
 
 # add GWAS scripts     
-ADD ["scripts/", "/gwas/scripts/"]
-ADD ["gwas.R", "/gwas/"]
-
+COPY scripts/ /gwas/
+COPY gwas.R /gwas/
 
 WORKDIR /gwas/
 
