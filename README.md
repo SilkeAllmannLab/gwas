@@ -7,6 +7,7 @@ Both methods will perform a Genome Wide Analysis (GWAS) using genetic variant (V
  
 <!-- MarkdownTOC autolink="true" levels="1,2,3" -->
 
+- [PLINK](#plink)
 - [1. Inputs and outputs](#1-inputs-and-outputs)
 	- [Inputs](#inputs)
 		- [VCF file](#vcf-file)
@@ -31,8 +32,16 @@ Both methods will perform a Genome Wide Analysis (GWAS) using genetic variant (V
 	- [RAINBOWR](#rainbowr)
 - [5. Troubleshooting](#5-troubleshooting)
 	- [RAINBOWR package](#rainbowr-package)
+- [6. Useful links](#6-useful-links)
 
 <!-- /MarkdownTOC -->
+
+# PLINK
+
+mydata is the prefix of the .ped and .map files.
+```bash
+plink --file mydata --pheno pheno.txt --pheno-name Phenotype --perm --threads 20 --assoc 
+```
 
 # 1. Inputs and outputs
 Both MUVR Random Forest and RAINBOWR methods use the same input files (VCF and phenotype). They also have similar outputs (table of significant SNPs) with some disctint graphs and tables. 
@@ -161,4 +170,15 @@ Sometimes, you might have issues with the installation of the `Rccp` package whi
 In the Shell, try: `apt-get install r-base-dev`
 
 
+# 6. Useful links
 
+
+There are 4 important parameters to set when building an RF model:
+
+*    nTree: Number of trees in the forest
+
+ *   mTry: Number of variants evaluated at each node of a tree
+
+ *  maxD: Maximum depth of a tree to grow
+
+ *  minNS: Minimum number of samples in a node to be processed
