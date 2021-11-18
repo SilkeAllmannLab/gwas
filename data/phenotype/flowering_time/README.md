@@ -3,8 +3,8 @@
 Number of days following stratification to opening of first flower. The experiment was stopped at 200 d, and accessions that had not flowered at that point were assigned a value of 200. The observed phenotypes are under slightly different growth conditions: 
 - SD: days until flowering under short day conditions,
 - LD: days until flowering under long day conditions, 
-- SDV: days until flowering under short day conditions with vernilization and finally,
-- LDV = days until flowering under long day conditions with vernilization.
+- SDV: days until flowering under short day conditions with vernalization and finally,
+- LDV = days until flowering under long day conditions with vernalization.
 
 ## Link
 [1001 genomes link](https://arapheno.1001genomes.org/ontology/PTO/TO:0002616)
